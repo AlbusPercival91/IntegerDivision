@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Division {
-    List<String> longDivisionList = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -29,7 +28,6 @@ public class Division {
 
     public static int divisionEngine(int dividend, int divider) {
         StringBuilder builder = new StringBuilder();
-        int initDividerLength = String.valueOf(divider).length();
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
         int substraction = 0;
