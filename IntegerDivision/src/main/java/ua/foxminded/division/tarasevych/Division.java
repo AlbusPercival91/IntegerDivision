@@ -43,15 +43,14 @@ public class Division {
             variable = Integer.parseInt(Math.abs(variable - substraction) + "".concat(getDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
-            if (variable < divider && variable <= substraction && initDividerLength < getDigits(dividend).size() - 1) {
+            if (variable < divider) {
 
-                while (variable < substraction) {
+                while (variable < substraction && dividerLength != getDigits(dividend).size()) {
                     variable = Integer.parseInt(variable + "".concat(getDigits(dividend).get(dividerLength++).toString()
                             .replace("[", "").replace("]", "").replace(", ", "")));
                     builder.append(0);
                 }
             }
-
             if (substraction != 0) {
                 System.out.println(substraction + "\n" + variable);
             }
