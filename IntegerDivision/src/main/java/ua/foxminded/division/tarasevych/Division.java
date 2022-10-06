@@ -72,20 +72,28 @@ public class Division {
     }
 
     public static void divisionDraw(List<Integer> list, int dividend, int divider, int result) {
-        System.out.printf("_%d|%d", dividend, divider);
-        System.out.println("");
-        System.out.printf(" %-" + String.valueOf(dividend).length() + "d|%s", list.get(0), "-----");
-        System.out.println("");
-        System.out.printf(" %-" + String.valueOf(dividend).length() + "s|%d", "-", result);
-        System.out.println("");
+        StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
 
-        for (int i = 1; i < list.size(); i++) {
-            System.out.printf("% d\n", list.get(i));
+        stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "d|%s\n", list.get(0),
+                String.join("", Collections.nCopies(String.valueOf(result).length(), "-"))));
+
+        stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "s|%d\n",
+                String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")), result));
+
+        for (int i = 1, j = 0; i < list.size(); i++, j++) {
+
+            if (i % 2 == 1 && i < list.size() - 1) {
+                stringBuilder.append("_");
+            }
+            stringBuilder.append(String.format("%d" + "\n", list.get(i)));
 
             if (i % 2 == 0) {
-                System.out.printf(" %s\n", "--");
+                stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
+                        String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
             }
+            stringBuilder.append(String.format("%" + i + "s", " "));
         }
+        System.out.println(stringBuilder);
     }
 
 }
