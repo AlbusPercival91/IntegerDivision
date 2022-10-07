@@ -80,18 +80,24 @@ public class Division {
         stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "s|%d\n",
                 String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")), result));
 
-        for (int i = 1, j = 0; i < list.size(); i++, j++) {
+        for (int i = 1, j = 1; i < list.size(); i++, j++) {
 
             if (i % 2 == 1 && i < list.size() - 1) {
                 stringBuilder.append("_");
             }
+            
+            if (i == list.size() - 1) {
+                stringBuilder.append(" ");
+            }
             stringBuilder.append(String.format("%d" + "\n", list.get(i)));
 
             if (i % 2 == 0) {
+                j--;
                 stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
                         String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
+                
             }
-            stringBuilder.append(String.format("%" + i + "s", " "));
+            stringBuilder.append(String.format("%" + j + "s", ""));
         }
         System.out.println(stringBuilder);
     }
