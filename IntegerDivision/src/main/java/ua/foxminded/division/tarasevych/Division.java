@@ -74,7 +74,7 @@ public class Division {
     public static void divisionDraw(List<Integer> list, int dividend, int divider, int result) {
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
 
-        for (int i = 0, j = 1; i < list.size(); i++, j++) {
+        for (int i = 0, j = 0; i < list.size(); i++, j++) {
 
             if (i < 1) {
                 stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "d|%s\n", list.get(i),
@@ -96,7 +96,7 @@ public class Division {
                 if (i % 2 == 0) {
                     j--;
                     stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
-                            String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
+                            String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
 
                 }
                 stringBuilder.append(String.format("%" + j + "s", ""));
