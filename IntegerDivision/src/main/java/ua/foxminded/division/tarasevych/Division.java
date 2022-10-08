@@ -7,15 +7,15 @@ import java.util.Scanner;
 
 public class Division {
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
         Scanner scan = new Scanner(System.in);
         int dividend = scan.nextInt();
         int divider = scan.nextInt();
-        divisionEngine(dividend, divider);
+        System.out.println(longDivision(dividend, divider));
         scan.close();
     }
 
-    public static List<Integer> getDigits(int dividend) {
+    public static List<Integer> getAllDigits(int dividend) {
         List<Integer> digitArray = new ArrayList<>();
 
         while (dividend > 0) {
@@ -26,27 +26,40 @@ public class Division {
         return digitArray;
     }
 
-    public static int divisionEngine(int dividend, int divider) {
+    public static int getDigits(int dividend, int conditionNotLess) {
+        int result = 0;
+
+        for (Integer i : getAllDigits(dividend)) {
+            result = 10 * result + i;
+
+            if (result >= conditionNotLess) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public static String longDivision(int dividend, int divider) {
         List<Integer> buildList = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
         int substraction = 0;
-        int variable = Integer.parseInt(getDigits(dividend).subList(0, dividerLength).toString().replace("[", "")
+        int variable = Integer.parseInt(getAllDigits(dividend).subList(0, dividerLength).toString().replace("[", "")
                 .replace("]", "").replace(", ", ""));
 
-        while (dividerLength != getDigits(dividend).size()) {
+        while (dividerLength != getAllDigits(dividend).size()) {
             result = Math.abs(variable / divider);
             builder.append(result);
             substraction = Math.abs(result * divider);
-            variable = Integer.parseInt(Math.abs(variable - substraction) + "".concat(getDigits(dividend)
+            variable = Integer.parseInt(Math.abs(variable - substraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
             if (variable < divider) {
 
-                while (variable < substraction && dividerLength != getDigits(dividend).size()) {
-                    variable = Integer.parseInt(variable + "".concat(getDigits(dividend).get(dividerLength++).toString()
-                            .replace("[", "").replace("]", "").replace(", ", "")));
+                while (variable < substraction && dividerLength != getAllDigits(dividend).size()) {
+                    variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++)
+                            .toString().replace("[", "").replace("]", "").replace(", ", "")));
                     builder.append(0);
                 }
             }
@@ -56,7 +69,7 @@ public class Division {
             }
         }
 
-        if (dividerLength == getDigits(dividend).size()) {
+        if (dividerLength == getAllDigits(dividend).size()) {
             result = Math.abs(variable / divider);
             substraction = Math.abs(result * divider);
             variable -= Math.abs(substraction);
@@ -67,54 +80,42 @@ public class Division {
                 Collections.addAll(buildList, substraction, variable);
             }
         }
-        divisionDraw(buildList, dividend, divider, result);
-        return result;
+        return convertLongDivision(buildList, dividend, divider, result);
     }
 
-    public static void divisionDraw(List<Integer> list, int dividend, int divider, int result) {
+    public static String convertLongDivision(List<Integer> list, int dividend, int divider, int result) {
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
+        int dividendLength = String.valueOf(dividend).length();
 
-        for (int i = 0, j = 0; i < list.size(); i++, j++) {
+        for (int i = 0; i < list.size(); i++) {
+            int dif = String.valueOf(getDigits(dividend, list.get(i))).length() - String.valueOf(list.get(i)).length();
+            int variableSize = String.valueOf(list.get(i)).length();
+            int resultSize = String.valueOf(result).length();
 
             if (i < 1) {
-                stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "d|%s\n", list.get(i),
-                        String.join("", Collections.nCopies(String.valueOf(result).length(), "-"))));
-                stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "s|%d\n",
-                        String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")), result));
-            }
+                stringBuilder.append(String.format(" %s" + "%d" + "%s" + "%s" + "%s" + "\n",
+                        String.join("", Collections.nCopies(dif, " ")), list.get(i),
+                        String.join("", Collections.nCopies(dividendLength - variableSize - 1, " ")), "|",
+                        String.join("", Collections.nCopies(resultSize, "-"))));
 
+                stringBuilder.append(String.format(String.format(" %s" + "%s" + "%s" + "%s" + "%d" + "\n",
+                        String.join("", Collections.nCopies(dif, " ")),
+                        String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")),
+                        String.join("", Collections.nCopies(dividendLength - variableSize - 1, " ")), "|", result)));
+            }
             if (i >= 1) {
-                if (i % 2 == 1 && i < list.size() - 1) {
-                    stringBuilder.append("_");
-                }
-
-                if (i == list.size() - 1) {
-                    stringBuilder.append(" ");
-                }
-                stringBuilder.append(String.format("%d" + "\n", list.get(i)));
-
-                if (i % 2 == 0) {
-                    j--;
-                    stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
-                            String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
-
-                }
-                stringBuilder.append(String.format("%" + j + "s", ""));
+                stringBuilder.append(String.format(" %d" + "\n", list.get(i)));
             }
-
         }
-
-        System.out.println(stringBuilder);
+        return stringBuilder.toString();
     }
-
 }
 
-//for (int i = 1, j = 1; i < list.size(); i++, j++) {
-//
+//if (i >= 1) {
 //    if (i % 2 == 1 && i < list.size() - 1) {
 //        stringBuilder.append("_");
 //    }
-//    
+//
 //    if (i == list.size() - 1) {
 //        stringBuilder.append(" ");
 //    }
@@ -123,8 +124,8 @@ public class Division {
 //    if (i % 2 == 0) {
 //        j--;
 //        stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
-//                String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
-//        
+//                String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
+//
 //    }
 //    stringBuilder.append(String.format("%" + j + "s", ""));
 //}
