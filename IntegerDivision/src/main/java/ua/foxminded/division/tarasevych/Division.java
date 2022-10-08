@@ -26,13 +26,13 @@ public class Division {
         return digitArray;
     }
 
-    public static int getDigits(int dividend, int conditionNotLess) {
+    public static int concatDigits(int dividend, int conditionBreak) {
         int result = 0;
 
         for (Integer i : getAllDigits(dividend)) {
             result = 10 * result + i;
 
-            if (result >= conditionNotLess) {
+            if (result >= conditionBreak) {
                 break;
             }
         }
@@ -85,26 +85,32 @@ public class Division {
 
     public static String convertLongDivision(List<Integer> list, int dividend, int divider, int result) {
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
-        int dividendLength = String.valueOf(dividend).length();
+        int resultLength = String.valueOf(result).length();
 
         for (int i = 0; i < list.size(); i++) {
-            int dif = String.valueOf(getDigits(dividend, list.get(i))).length() - String.valueOf(list.get(i)).length();
-            int variableSize = String.valueOf(list.get(i)).length();
-            int resultSize = String.valueOf(result).length();
+            int dif = String.valueOf(concatDigits(dividend, list.get(i))).length()
+                    - String.valueOf(list.get(i)).length();
+            int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
+
+            if (dif > 0) {
+                space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
+            }
 
             if (i < 1) {
                 stringBuilder.append(String.format(" %s" + "%d" + "%s" + "%s" + "%s" + "\n",
                         String.join("", Collections.nCopies(dif, " ")), list.get(i),
-                        String.join("", Collections.nCopies(dividendLength - variableSize - 1, " ")), "|",
-                        String.join("", Collections.nCopies(resultSize, "-"))));
+                        String.join("", Collections.nCopies(space, " ")), "|",
+                        String.join("", Collections.nCopies(resultLength, "-"))));
 
                 stringBuilder.append(String.format(String.format(" %s" + "%s" + "%s" + "%s" + "%d" + "\n",
                         String.join("", Collections.nCopies(dif, " ")),
                         String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")),
-                        String.join("", Collections.nCopies(dividendLength - variableSize - 1, " ")), "|", result)));
+                        String.join("", Collections.nCopies(space, " ")), "|", result)));
             }
+
             if (i >= 1) {
-                stringBuilder.append(String.format(" %d" + "\n", list.get(i)));
+                stringBuilder.append(String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(dif, " ")),
+                        list.get(i)));
             }
         }
         return stringBuilder.toString();
