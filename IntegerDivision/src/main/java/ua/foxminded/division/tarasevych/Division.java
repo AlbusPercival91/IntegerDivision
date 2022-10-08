@@ -74,32 +74,57 @@ public class Division {
     public static void divisionDraw(List<Integer> list, int dividend, int divider, int result) {
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
 
-        stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "d|%s\n", list.get(0),
-                String.join("", Collections.nCopies(String.valueOf(result).length(), "-"))));
+        for (int i = 0, j = 1; i < list.size(); i++, j++) {
 
-        stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "s|%d\n",
-                String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")), result));
-
-        for (int i = 1, j = 1; i < list.size(); i++, j++) {
-
-            if (i % 2 == 1 && i < list.size() - 1) {
-                stringBuilder.append("_");
+            if (i < 1) {
+                stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "d|%s\n", list.get(i),
+                        String.join("", Collections.nCopies(String.valueOf(result).length(), "-"))));
+                stringBuilder.append(String.format(" %-" + String.valueOf(dividend).length() + "s|%d\n",
+                        String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")), result));
             }
-            
-            if (i == list.size() - 1) {
-                stringBuilder.append(" ");
-            }
-            stringBuilder.append(String.format("%d" + "\n", list.get(i)));
 
-            if (i % 2 == 0) {
-                j--;
-                stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
-                        String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
-                
+            if (i >= 1) {
+                if (i % 2 == 1 && i < list.size() - 1) {
+                    stringBuilder.append("_");
+                }
+
+                if (i == list.size() - 1) {
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append(String.format("%d" + "\n", list.get(i)));
+
+                if (i % 2 == 0) {
+                    j--;
+                    stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
+                            String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
+
+                }
+                stringBuilder.append(String.format("%" + j + "s", ""));
             }
-            stringBuilder.append(String.format("%" + j + "s", ""));
+
         }
+
         System.out.println(stringBuilder);
     }
 
 }
+
+//for (int i = 1, j = 1; i < list.size(); i++, j++) {
+//
+//    if (i % 2 == 1 && i < list.size() - 1) {
+//        stringBuilder.append("_");
+//    }
+//    
+//    if (i == list.size() - 1) {
+//        stringBuilder.append(" ");
+//    }
+//    stringBuilder.append(String.format("%d" + "\n", list.get(i)));
+//
+//    if (i % 2 == 0) {
+//        j--;
+//        stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
+//                String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
+//        
+//    }
+//    stringBuilder.append(String.format("%" + j + "s", ""));
+//}
