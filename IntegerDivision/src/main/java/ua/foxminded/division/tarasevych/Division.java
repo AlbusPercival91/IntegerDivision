@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Division {
+    static List<Integer> varLengthDifList = new ArrayList<>();
 
     public static void main(String... args) {
         Scanner scan = new Scanner(System.in);
@@ -52,6 +53,7 @@ public class Division {
             result = Math.abs(variable / divider);
             builder.append(result);
             substraction = Math.abs(result * divider);
+            int variableLength = String.valueOf(variable - substraction).length();
             variable = Integer.parseInt(Math.abs(variable - substraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
@@ -66,7 +68,9 @@ public class Division {
 
             if (substraction != 0) {
                 Collections.addAll(buildList, substraction, variable);
+                Collections.addAll(varLengthDifList, String.valueOf(substraction).length() - variableLength, 0);
             }
+
         }
 
         if (dividerLength == getAllDigits(dividend).size()) {
@@ -78,19 +82,25 @@ public class Division {
 
             if (substraction > variable) {
                 Collections.addAll(buildList, substraction, variable);
+                Collections.addAll(varLengthDifList,
+                        String.valueOf(substraction).length() - String.valueOf(variable).length(), 0);
             }
         }
+        System.out.println(varLengthDifList.toString());
         return converToView(buildList, dividend, divider, result);
     }
 
     public static String converToView(List<Integer> list, int dividend, int divider, int result) {
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
         int resultLength = String.valueOf(result).length();
+        int i = 0;
+        int j = 0;
+        int sum = 0;
 
-        for (int i = 0; i < list.size(); i++) {
+        while (i < list.size() && j < varLengthDifList.size()) {
             int dif = String.valueOf(concatDigits(dividend, list.get(i))).length()
                     - String.valueOf(list.get(i)).length();
-            
+
             int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
 
             if (dif > 0) {
@@ -105,16 +115,19 @@ public class Division {
 
                 stringBuilder.append(String.format(String.format(" %s" + "%s" + "%s" + "%s" + "%d" + "\n",
                         String.join("", Collections.nCopies(dif, " ")),
-                        String.join("", Collections.nCopies(String.valueOf(list.get(0)).length(), "-")),
+                        String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-")),
                         String.join("", Collections.nCopies(space, " ")), "|", result)));
             }
 
             if (i >= 1) {
-                stringBuilder.append(String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(dif, " ")),
-                        list.get(i)));
-                
+                sum += varLengthDifList.get(j++);
+                stringBuilder.append(String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(sum, " ")),
+                        list.get(j)));
             }
+            System.out.println(sum);
+            i++;
         }
+
         return stringBuilder.toString();
     }
 }
