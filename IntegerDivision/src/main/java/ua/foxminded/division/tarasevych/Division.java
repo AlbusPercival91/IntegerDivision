@@ -80,16 +80,17 @@ public class Division {
                 Collections.addAll(buildList, substraction, variable);
             }
         }
-        return convertLongDivision(buildList, dividend, divider, result);
+        return converToView(buildList, dividend, divider, result);
     }
 
-    public static String convertLongDivision(List<Integer> list, int dividend, int divider, int result) {
+    public static String converToView(List<Integer> list, int dividend, int divider, int result) {
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
         int resultLength = String.valueOf(result).length();
 
         for (int i = 0; i < list.size(); i++) {
             int dif = String.valueOf(concatDigits(dividend, list.get(i))).length()
                     - String.valueOf(list.get(i)).length();
+            
             int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
 
             if (dif > 0) {
@@ -111,6 +112,7 @@ public class Division {
             if (i >= 1) {
                 stringBuilder.append(String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(dif, " ")),
                         list.get(i)));
+                
             }
         }
         return stringBuilder.toString();
