@@ -3,17 +3,12 @@ package ua.foxminded.division.tarasevych;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class Division {
     static List<Integer> varLengthDifList = new ArrayList<>();
 
-    public static void main(String... args) {
-        Scanner scan = new Scanner(System.in);
-        int dividend = scan.nextInt();
-        int divider = scan.nextInt();
-        System.out.println(longDivision(dividend, divider));
-        scan.close();
+    private Division() {
+
     }
 
     public static List<Integer> getAllDigits(int dividend) {
@@ -70,7 +65,6 @@ public class Division {
                 Collections.addAll(buildList, substraction, variable);
                 Collections.addAll(varLengthDifList, String.valueOf(substraction).length() - variableLength, 0);
             }
-
         }
 
         if (dividerLength == getAllDigits(dividend).size()) {
@@ -86,7 +80,6 @@ public class Division {
                         String.valueOf(substraction).length() - String.valueOf(variable).length(), 0);
             }
         }
-        System.out.println(varLengthDifList.toString());
         return converToView(buildList, dividend, divider, result);
     }
 
@@ -124,33 +117,13 @@ public class Division {
                         list.get(j)));
 
                 if (j % 2 == 0) {
-                    stringBuilder.append(String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(sum, " ")),
-                            String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
+                    stringBuilder
+                            .append(String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(sum, " ")),
+                                    String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
                 }
             }
-            System.out.println(sum);
             i++;
         }
-
         return stringBuilder.toString();
     }
 }
-
-//if (i >= 1) {
-//    if (i % 2 == 1 && i < list.size() - 1) {
-//        stringBuilder.append("_");
-//    }
-//
-//    if (i == list.size() - 1) {
-//        stringBuilder.append(" ");
-//    }
-//    stringBuilder.append(String.format("%d" + "\n", list.get(i)));
-//
-//    if (i % 2 == 0) {
-//        j--;
-//        stringBuilder.append(String.format("%" + j + "s" + "%s\n", "",
-//                String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
-//
-//    }
-//    stringBuilder.append(String.format("%" + j + "s", ""));
-//}
