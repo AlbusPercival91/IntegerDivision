@@ -113,10 +113,11 @@ public class Division {
 
             if (i >= 1) {
                 sum += varLengthDifList.get(j++);
-                if(divider==list.get(j)) {
+
+                if (divider == list.get(j)) {
                     sum++;
                 }
-                
+
                 stringBuilder.append(String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(sum, " ")),
                         list.get(j)));
 
