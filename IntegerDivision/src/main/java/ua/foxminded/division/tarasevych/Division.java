@@ -100,7 +100,6 @@ public class Division {
         while (i < list.size() && j < varLengthDifList.size()) {
             int dif = String.valueOf(concatDigits(dividend, list.get(i))).length()
                     - String.valueOf(list.get(i)).length();
-
             int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
 
             if (dif > 0) {
@@ -123,6 +122,11 @@ public class Division {
                 sum += varLengthDifList.get(j++);
                 stringBuilder.append(String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(sum, " ")),
                         list.get(j)));
+
+                if (j % 2 == 0) {
+                    stringBuilder.append(String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(sum, " ")),
+                            String.join("", Collections.nCopies(String.valueOf(list.get(j)).length(), "-"))));
+                }
             }
             System.out.println(sum);
             i++;
