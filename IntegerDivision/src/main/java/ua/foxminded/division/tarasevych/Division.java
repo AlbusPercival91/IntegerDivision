@@ -35,7 +35,7 @@ public class Division {
     }
 
     public static String longDivision(int dividend, int divider) {
-        List<Integer> buildList = new ArrayList<>();
+        List<String> buildList = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
@@ -60,7 +60,7 @@ public class Division {
             }
 
             if (substraction != 0) {
-                Collections.addAll(buildList, substraction, variable);
+                Collections.addAll(buildList, " " + substraction, "_" + variable);            
             }
         }
 
@@ -72,33 +72,43 @@ public class Division {
             result = Integer.parseInt(builder.toString());
 
             if (substraction > variable) {
-                Collections.addAll(buildList, substraction, variable);
+                Collections.addAll(buildList, " " + substraction, " " + variable);
             }
         }
         return converToView(buildList, dividend, divider, result);
     }
 
-    public static String converToView(List<Integer> list, int dividend, int divider, int result) {
+    public static String converToView(List<String> list, int dividend, int divider, int result) {
         List<Integer> digitLengthList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
         int resultLength = String.valueOf(result).length();
-        digitLengthList.add(String.valueOf(concatDigits(dividend, list.get(0))).length());
+        digitLengthList.add(String.valueOf(concatDigits(dividend, Integer.parseInt(list.get(0).trim()))).length());
         int dif = 0;
+
         for (int i = 0; i < list.size(); i++) {
 
             if (i % 2 == 0) {
-                Collections.addAll(digitLengthList, String.valueOf(list.get(i)).length(),
-                        String.valueOf(list.get(i + 1)).length());
+
+                Collections.addAll(digitLengthList, String.valueOf(list.get(i).trim()).length(),
+                        String.valueOf(list.get(i + 1)).length() - 1);
             }
 
 //            int dif = String.valueOf(concatDigits(dividend, list.get(i))).length()
 //                    - String.valueOf(list.get(i)).length();
 
+            dif = digitLengthList.get(i) - digitLengthList.get(i + 1);
+
             /*
-             * change negative resulte (-1) to 0
+             * may be remove to keep negative result??
+             * 
+             * dif not working properly!
+             * 
+             * in some cases _ exist in last variable!!
              */
 
-            dif = digitLengthList.get(i) - digitLengthList.get(i + 1);
+            if (dif < 0) {
+                dif = 0;
+            }
             System.out.println(dif);
 
             if (i < 1) {
@@ -108,25 +118,25 @@ public class Division {
                     space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
                 }
 
-                stringBuilder.append(String.format(" %s" + "%d" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(0, " ")), list.get(i),
-                        String.join("", Collections.nCopies(space, " ")), "|",
+                stringBuilder.append(String.format("%s" + "%s" + "%s" + "%s" + "%s" + "\n",
+                        String.join("", Collections.nCopies(dif, " ")), list.get(i),
+                        String.join("", Collections.nCopies(space + 1, " ")), "|",
                         String.join("", Collections.nCopies(resultLength, "-"))));
 
-                stringBuilder.append(String.format(String.format(" %s" + "%s" + "%s" + "%s" + "%d" + "\n",
-                        String.join("", Collections.nCopies(0, " ")),
-                        String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-")),
-                        String.join("", Collections.nCopies(space, " ")), "|", result)));
+                stringBuilder.append(String.format(String.format("%s" + " %s" + "%s" + "%s" + "%s" + "\n",
+                        String.join("", Collections.nCopies(dif, " ")),
+                        String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-")),
+                        String.join("", Collections.nCopies(space + 1, " ")), "|", result)));
             }
 
             if (i >= 1) {
                 stringBuilder.append(
-                        String.format(" %s" + "%d" + "\n", String.join("", Collections.nCopies(0, " ")), list.get(i)));
+                        String.format("%s" + "%s" + "\n", String.join("", Collections.nCopies(0, " ")), list.get(i)));
 
                 if (i % 2 == 0) {
-                    stringBuilder
-                            .append(String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(0, " ")),
-                                    String.join("", Collections.nCopies(String.valueOf(list.get(i)).length(), "-"))));
+                    stringBuilder.append(String.format(" %s" + "%s" + "\n",
+                            String.join("", Collections.nCopies(0, " ")),
+                            String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-"))));
                 }
             }
         }
