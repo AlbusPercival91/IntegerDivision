@@ -60,7 +60,7 @@ public class Division {
             }
 
             if (substraction != 0) {
-                Collections.addAll(buildList, " " + substraction, "_" + variable);            
+                Collections.addAll(buildList, " " + substraction, "_" + variable);
             }
         }
 
@@ -84,6 +84,7 @@ public class Division {
         int resultLength = String.valueOf(result).length();
         digitLengthList.add(String.valueOf(concatDigits(dividend, Integer.parseInt(list.get(0).trim()))).length());
         int dif = 0;
+        int sumDif = 0;
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -92,9 +93,6 @@ public class Division {
                 Collections.addAll(digitLengthList, String.valueOf(list.get(i).trim()).length(),
                         String.valueOf(list.get(i + 1)).length() - 1);
             }
-
-//            int dif = String.valueOf(concatDigits(dividend, list.get(i))).length()
-//                    - String.valueOf(list.get(i)).length();
 
             dif = digitLengthList.get(i) - digitLengthList.get(i + 1);
 
@@ -109,9 +107,9 @@ public class Division {
             if (dif < 0) {
                 dif = 0;
             }
-            System.out.println(dif);
-
+           
             if (i < 1) {
+                sumDif += dif;
                 int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
 
                 if (dif > 0) {
@@ -130,14 +128,17 @@ public class Division {
             }
 
             if (i >= 1) {
-                stringBuilder.append(
-                        String.format("%s" + "%s" + "\n", String.join("", Collections.nCopies(0, " ")), list.get(i)));
+                sumDif += dif;
+                stringBuilder.append(String.format("%s" + "%s" + "\n",
+                        String.join("", Collections.nCopies(sumDif, " ")), list.get(i)));
 
                 if (i % 2 == 0) {
                     stringBuilder.append(String.format(" %s" + "%s" + "\n",
-                            String.join("", Collections.nCopies(0, " ")),
+                            String.join("", Collections.nCopies(sumDif, " ")),
                             String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-"))));
                 }
+                System.out.println("dif "+dif);
+                System.out.println("sumDif " + sumDif);
             }
         }
         System.out.println(digitLengthList);
