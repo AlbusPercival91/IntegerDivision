@@ -81,12 +81,11 @@ public class Division {
     public static String converToView(List<String> list, int dividend, int divider, int result) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
-        List<Integer> correctionList = new ArrayList<>();
+        List<Integer> shiftList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
         int resultLength = String.valueOf(result).length();
         involvedList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
         subtractList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
-        int dif = 0;
         int sumDif = 0;
 
         for (int i = 0; i < list.size(); i++) {
@@ -94,41 +93,34 @@ public class Division {
             if (i % 2 == 0) {
                 Collections.addAll(involvedList, Integer.parseInt(list.get(i).replace("_", "").trim()),
                         Integer.parseInt(list.get(i + 1).replace("_", "").trim()));
-
                 Collections.addAll(subtractList, involvedList.get(i + 1),
                         involvedList.get(i) - involvedList.get(i + 1));
             }
 
-            correctionList.add(
+            shiftList.add(
                     String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
 
-            dif = correctionList.get(i);
-
-            if (dif < 0) {
-                dif = 0;
-            }
-
             if (i < 1) {
-                sumDif += dif;
+                sumDif += shiftList.get(i);
                 int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
 
-                if (dif > 0) {
+                if (shiftList.get(i) > 0) {
                     space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
                 }
 
                 stringBuilder.append(String.format("%s" + "%s" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(dif, " ")), list.get(i),
+                        String.join("", Collections.nCopies(shiftList.get(i), " ")), list.get(i),
                         String.join("", Collections.nCopies(space + 1, " ")), "|",
                         String.join("", Collections.nCopies(resultLength, "-"))));
 
                 stringBuilder.append(String.format(String.format("%s" + " %s" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(dif, " ")),
+                        String.join("", Collections.nCopies(shiftList.get(i), " ")),
                         String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-")),
                         String.join("", Collections.nCopies(space + 1, " ")), "|", result)));
             }
 
             if (i >= 1) {
-                sumDif += dif;
+                sumDif += shiftList.get(i);
                 stringBuilder.append(String.format("%s" + "%s" + "\n",
                         String.join("", Collections.nCopies(sumDif, " ")), list.get(i)));
 
@@ -137,14 +129,8 @@ public class Division {
                             String.join("", Collections.nCopies(sumDif, " ")),
                             String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-"))));
                 }
-//                System.out.println("dif " + dif);
-//                System.out.println("sumDif " + sumDif);
-
             }
         }
-        System.out.println("inv " + involvedList);
-        System.out.println("sub" + subtractList);
-        System.out.println("corr " + correctionList);
         return stringBuilder.toString();
     }
 }
