@@ -79,35 +79,35 @@ public class Division {
     }
 
     public static String converToView(List<String> list, int dividend, int divider, int result) {
-        List<Integer> digitLengthList = new ArrayList<>();
+        List<Integer> involvedList = new ArrayList<>();
+        List<Integer> subtractList = new ArrayList<>();
+        List<Integer> correctionList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
         int resultLength = String.valueOf(result).length();
-        digitLengthList.add(String.valueOf(concatDigits(dividend, Integer.parseInt(list.get(0).trim()))).length());
+        involvedList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
+        subtractList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
         int dif = 0;
         int sumDif = 0;
 
         for (int i = 0; i < list.size(); i++) {
 
             if (i % 2 == 0) {
+                Collections.addAll(involvedList, Integer.parseInt(list.get(i).replace("_", "").trim()),
+                        Integer.parseInt(list.get(i + 1).replace("_", "").trim()));
 
-                Collections.addAll(digitLengthList, String.valueOf(list.get(i).trim()).length(),
-                        String.valueOf(list.get(i + 1)).length() - 1);
+                Collections.addAll(subtractList, involvedList.get(i + 1),
+                        involvedList.get(i) - involvedList.get(i + 1));
             }
 
-            dif = digitLengthList.get(i) - digitLengthList.get(i + 1);
+            correctionList.add(
+                    String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
 
-            /*
-             * may be remove to keep negative result??
-             * 
-             * dif not working properly!
-             * 
-             * in some cases _ exist in last variable!!
-             */
+            dif = correctionList.get(i);
 
             if (dif < 0) {
                 dif = 0;
             }
-           
+
             if (i < 1) {
                 sumDif += dif;
                 int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
@@ -137,11 +137,14 @@ public class Division {
                             String.join("", Collections.nCopies(sumDif, " ")),
                             String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-"))));
                 }
-                System.out.println("dif "+dif);
-                System.out.println("sumDif " + sumDif);
+//                System.out.println("dif " + dif);
+//                System.out.println("sumDif " + sumDif);
+
             }
         }
-        System.out.println(digitLengthList);
+        System.out.println("inv " + involvedList);
+        System.out.println("sub" + subtractList);
+        System.out.println("corr " + correctionList);
         return stringBuilder.toString();
     }
 }
