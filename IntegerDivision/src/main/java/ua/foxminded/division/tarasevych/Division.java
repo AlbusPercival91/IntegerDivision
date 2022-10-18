@@ -51,7 +51,6 @@ public class Division {
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
             if (variable < divider) {
-
                 while (variable < subtraction && dividerLength != getAllDigits(dividend).size()) {
                     variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++)
                             .toString().replace("[", "").replace("]", "").replace(", ", "")));
@@ -98,7 +97,6 @@ public class Division {
 
             leftSpaceList.add(
                     String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
-
             spaceLeft += leftSpaceList.get(i);
 
             if (i < 1) {
@@ -107,7 +105,6 @@ public class Division {
                 if (leftSpaceList.get(i) > 0) {
                     spaceMiddle = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
                 }
-
                 stringBuilder.append(String.format("%s" + "%s" + "%s" + "%s" + "%s" + "\n",
                         String.join("", Collections.nCopies(spaceLeft, " ")), list.get(i),
                         String.join("", Collections.nCopies(spaceMiddle + 1, " ")), "|",
