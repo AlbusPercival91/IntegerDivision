@@ -39,40 +39,40 @@ public class Division {
         StringBuilder builder = new StringBuilder();
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
-        int substraction = 0;
+        int subtraction = 0;
         int variable = Integer.parseInt(getAllDigits(dividend).subList(0, dividerLength).toString().replace("[", "")
                 .replace("]", "").replace(", ", ""));
 
         while (dividerLength != getAllDigits(dividend).size()) {
             result = Math.abs(variable / divider);
             builder.append(result);
-            substraction = Math.abs(result * divider);
-            variable = Integer.parseInt(Math.abs(variable - substraction) + "".concat(getAllDigits(dividend)
+            subtraction = Math.abs(result * divider);
+            variable = Integer.parseInt(Math.abs(variable - subtraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
             if (variable < divider) {
 
-                while (variable < substraction && dividerLength != getAllDigits(dividend).size()) {
+                while (variable < subtraction && dividerLength != getAllDigits(dividend).size()) {
                     variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++)
                             .toString().replace("[", "").replace("]", "").replace(", ", "")));
                     builder.append(0);
                 }
             }
 
-            if (substraction != 0) {
-                Collections.addAll(buildList, " " + substraction, "_" + variable);
+            if (subtraction != 0) {
+                Collections.addAll(buildList, " " + subtraction, "_" + variable);
             }
         }
 
         if (dividerLength == getAllDigits(dividend).size()) {
             result = Math.abs(variable / divider);
-            substraction = Math.abs(result * divider);
-            variable -= Math.abs(substraction);
+            subtraction = Math.abs(result * divider);
+            variable -= Math.abs(subtraction);
             builder.append(result);
             result = Integer.parseInt(builder.toString());
 
-            if (substraction > variable) {
-                Collections.addAll(buildList, " " + substraction, " " + variable);
+            if (subtraction > variable) {
+                Collections.addAll(buildList, " " + subtraction, " " + variable);
             }
         }
         return converToView(buildList, dividend, divider, result);
@@ -81,15 +81,14 @@ public class Division {
     public static String converToView(List<String> list, int dividend, int divider, int result) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
-        List<Integer> shiftList = new ArrayList<>();
+        List<Integer> leftSpaceList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
         int resultLength = String.valueOf(result).length();
         involvedList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
         subtractList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
-        int sumDif = 0;
+        int spaceLeft = 0;
 
         for (int i = 0; i < list.size(); i++) {
-
             if (i % 2 == 0) {
                 Collections.addAll(involvedList, Integer.parseInt(list.get(i).replace("_", "").trim()),
                         Integer.parseInt(list.get(i + 1).replace("_", "").trim()));
@@ -97,36 +96,36 @@ public class Division {
                         involvedList.get(i) - involvedList.get(i + 1));
             }
 
-            shiftList.add(
+            leftSpaceList.add(
                     String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
 
-            if (i < 1) {
-                sumDif += shiftList.get(i);
-                int space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
+            spaceLeft += leftSpaceList.get(i);
 
-                if (shiftList.get(i) > 0) {
-                    space = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
+            if (i < 1) {
+                int spaceMiddle = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
+
+                if (leftSpaceList.get(i) > 0) {
+                    spaceMiddle = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
                 }
 
                 stringBuilder.append(String.format("%s" + "%s" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(shiftList.get(i), " ")), list.get(i),
-                        String.join("", Collections.nCopies(space + 1, " ")), "|",
+                        String.join("", Collections.nCopies(spaceLeft, " ")), list.get(i),
+                        String.join("", Collections.nCopies(spaceMiddle + 1, " ")), "|",
                         String.join("", Collections.nCopies(resultLength, "-"))));
 
                 stringBuilder.append(String.format(String.format("%s" + " %s" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(shiftList.get(i), " ")),
+                        String.join("", Collections.nCopies(spaceLeft, " ")),
                         String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-")),
-                        String.join("", Collections.nCopies(space + 1, " ")), "|", result)));
+                        String.join("", Collections.nCopies(spaceMiddle + 1, " ")), "|", result)));
             }
 
             if (i >= 1) {
-                sumDif += shiftList.get(i);
                 stringBuilder.append(String.format("%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(sumDif, " ")), list.get(i)));
+                        String.join("", Collections.nCopies(spaceLeft, " ")), list.get(i)));
 
                 if (i % 2 == 0) {
                     stringBuilder.append(String.format(" %s" + "%s" + "\n",
-                            String.join("", Collections.nCopies(sumDif, " ")),
+                            String.join("", Collections.nCopies(spaceLeft, " ")),
                             String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-"))));
                 }
             }
