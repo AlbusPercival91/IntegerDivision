@@ -117,13 +117,19 @@ public class Division {
             }
 
             if (i >= 1) {
-                stringBuilder.append(String.format("%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(spaceLeft, " ")), list.get(i)));
+                String value = list.get(i);
+
+                if (list.get(list.size() - 1).contains("_")) {
+                    value = list.get(list.size() - 1).replace("_", " ");
+                }
+
+                stringBuilder.append(
+                        String.format("%s" + "%s" + "\n", String.join("", Collections.nCopies(spaceLeft, " ")), value));
 
                 if (i % 2 == 0) {
-                    stringBuilder.append(String.format(" %s" + "%s" + "\n",
-                            String.join("", Collections.nCopies(spaceLeft, " ")),
-                            String.join("", Collections.nCopies(String.valueOf(list.get(i)).length() - 1, "-"))));
+                    stringBuilder.append(
+                            String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(spaceLeft, " ")),
+                                    String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-"))));
                 }
             }
 
