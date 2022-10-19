@@ -88,13 +88,13 @@ public class Division {
         int spaceLeft = 0;
 
         for (int i = 0; i < list.size(); i++) {
+
             if (i % 2 == 0) {
                 Collections.addAll(involvedList, Integer.parseInt(list.get(i).replace("_", "").trim()),
                         Integer.parseInt(list.get(i + 1).replace("_", "").trim()));
                 Collections.addAll(subtractList, involvedList.get(i + 1),
                         involvedList.get(i) - involvedList.get(i + 1));
             }
-
             leftSpaceList.add(
                     String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
             spaceLeft += leftSpaceList.get(i);
@@ -127,8 +127,9 @@ public class Division {
                 }
             }
 
-            if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0) {
-                spaceLeft += leftSpaceList.get(i) + 1;
+            if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
+                    && i % 2 == 0) {
+                spaceLeft++;
             }
         }
         return stringBuilder.toString();
