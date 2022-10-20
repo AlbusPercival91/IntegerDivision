@@ -58,7 +58,7 @@ public class Division {
                 }
             }
 
-            if (subtraction != 0) {
+            if (subtraction > 0) {
                 Collections.addAll(buildList, " " + subtraction, "_" + variable);
             }
         }
@@ -119,7 +119,7 @@ public class Division {
             if (i >= 1) {
                 String value = list.get(i);
 
-                if (list.get(list.size() - 1).contains("_")) {
+                if (value.contains("_") && i == list.size() - 1) {
                     value = list.get(list.size() - 1).replace("_", " ");
                 }
 
