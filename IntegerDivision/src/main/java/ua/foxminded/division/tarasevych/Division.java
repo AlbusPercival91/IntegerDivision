@@ -50,12 +50,10 @@ public class Division {
             variable = Integer.parseInt(Math.abs(variable - subtraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
-            if (variable < divider) {
-                while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
-                    variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++)
-                            .toString().replace("[", "").replace("]", "").replace(", ", "")));
-                    builder.append(0);
-                }
+            while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
+                variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++).toString()
+                        .replace("[", "").replace("]", "").replace(", ", "")));
+                builder.append(0);
             }
 
             if (subtraction > 0) {
