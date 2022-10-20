@@ -51,7 +51,7 @@ public class Division {
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
             if (variable < divider) {
-                while (variable < subtraction && dividerLength != getAllDigits(dividend).size()) {
+                while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
                     variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++)
                             .toString().replace("[", "").replace("]", "").replace(", ", "")));
                     builder.append(0);

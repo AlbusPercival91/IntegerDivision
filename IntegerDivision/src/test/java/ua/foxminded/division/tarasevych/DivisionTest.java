@@ -87,4 +87,24 @@ class DivisionTest {
                 + "   ---\n"
                 + "    20\n", Division.longDivision(78945, 77));
     }
+    
+    @Test
+    void test_12345() {
+        assertEquals("_12345|1\n"
+                + " 1    |-----\n"
+                + " -    |12345\n"
+                + " _2\n"
+                + "  2\n"
+                + "  -\n"
+                + "  _3\n"
+                + "   3\n"
+                + "   -\n"
+                + "   _4\n"
+                + "    4\n"
+                + "    -\n"
+                + "    _5\n"
+                + "     5\n"
+                + "     -\n"
+                + "     0\n", Division.longDivision(12345, 1));
+    }
 }
