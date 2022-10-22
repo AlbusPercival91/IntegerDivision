@@ -36,7 +36,7 @@ public class Division {
 
     public static String longDivision(int dividend, int divider) {
         List<String> buildList = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
+        StringBuilder resultBuilder = new StringBuilder();
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
         int subtraction = 0;
@@ -45,7 +45,7 @@ public class Division {
 
         while (dividerLength != getAllDigits(dividend).size()) {
             result = Math.abs(variable / divider);
-            builder.append(result);
+            resultBuilder.append(result);
             subtraction = Math.abs(result * divider);
             variable = Integer.parseInt(Math.abs(variable - subtraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
@@ -53,7 +53,7 @@ public class Division {
             while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
                 variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++).toString()
                         .replace("[", "").replace("]", "").replace(", ", "")));
-                builder.append(0);
+                resultBuilder.append(0);
             }
 
             if (subtraction > 0) {
@@ -65,8 +65,8 @@ public class Division {
             result = Math.abs(variable / divider);
             subtraction = Math.abs(result * divider);
             variable -= Math.abs(subtraction);
-            builder.append(result);
-            result = Integer.parseInt(builder.toString());
+            resultBuilder.append(result);
+            result = Integer.parseInt(resultBuilder.toString());
 
             if (subtraction > variable) {
                 Collections.addAll(buildList, " " + subtraction, " " + variable);
@@ -134,6 +134,10 @@ public class Division {
             if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
                     && i % 2 == 0) {
                 spaceLeft++;
+
+                if (getAllDigits(dividend).get(spaceLeft) == 0) {
+                    spaceLeft++;
+                }
             }
         }
         return stringBuilder.toString();
