@@ -136,6 +136,10 @@ public class Division {
             if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
                     && i % 2 == 0) {
                 spaceLeft++;
+                
+                if(getAllDigits(dividend).get(spaceLeft) == 0) {
+                    spaceLeft++;
+                }
             }
         }
         return stringBuilder.toString();

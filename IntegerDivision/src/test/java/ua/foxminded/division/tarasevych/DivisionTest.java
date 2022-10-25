@@ -107,4 +107,111 @@ class DivisionTest {
                 + "     -\n"
                 + "     0\n", Division.longDivision(12345, 1));
     }
+    
+    
+    
+    @Test
+    void test_1010101() {
+        assertEquals("_1010101|1\n"
+                + " 1      |-------\n"
+                + " -      |1010101\n"
+                + "  _1\n"
+                + "   1\n"
+                + "   -\n"
+                + "    _1\n"
+                + "     1\n"
+                + "     -\n"
+                + "      _1\n"
+                + "       1\n"
+                + "       -\n"
+                + "       0\n", Division.longDivision(1010101, 1));
+    }
+    
+    @Test
+    void test_111010111() {
+        assertEquals("_111010111|1\n"
+                + " 1        |---------\n"
+                + " -        |111010111\n"
+                + " _1\n"
+                + "  1\n"
+                + "  -\n"
+                + "  _1\n"
+                + "   1\n"
+                + "   -\n"
+                + "    _1\n"
+                + "     1\n"
+                + "     -\n"
+                + "      _1\n"
+                + "       1\n"
+                + "       -\n"
+                + "       _1\n"
+                + "        1\n"
+                + "        -\n"
+                + "        _1\n"
+                + "         1\n"
+                + "         -\n"
+                + "         0\n", Division.longDivision(111010111, 1));
+    }
+    
+    @Test
+    void test_1004() {
+        assertEquals("_1004|4\n"
+                + "  8  |---\n"
+                + "  -  |251\n"
+                + " _20\n"
+                + "  20\n"
+                + "  --\n"
+                + "   _4\n"
+                + "    4\n"
+                + "    -\n"
+                + "    0\n", Division.longDivision(1004, 4));
+    }
+    
+    @Test
+    void test_10004() {
+        assertEquals("_10004|4\n"
+                + "  8   |----\n"
+                + "  -   |2501\n"
+                + " _20\n"
+                + "  20\n"
+                + "  --\n"
+                + "    _4\n"
+                + "     4\n"
+                + "     -\n"
+                + "     0\n", Division.longDivision(10004, 4));
+    }
+    
+    @Test
+    void test_1000404() {
+        assertEquals("_1000404|4\n"
+                + "  8     |------\n"
+                + "  -     |250101\n"
+                + " _20\n"
+                + "  20\n"
+                + "  --\n"
+                + "    _4\n"
+                + "     4\n"
+                + "     -\n"
+                + "      _4\n"
+                + "       4\n"
+                + "       -\n"
+                + "       0\n", Division.longDivision(1000404, 4));
+    }
+    
+    @Test
+    void test_100404() {
+        assertEquals("_100404|4\n"
+                + "  8    |-----\n"
+                + "  -    |25101\n"
+                + " _20\n"
+                + "  20\n"
+                + "  --\n"
+                + "   _4\n"
+                + "    4\n"
+                + "    -\n"
+                + "     _4\n"
+                + "      4\n"
+                + "      -\n"
+                + "      0", Division.longDivision(100404, 4));
+    }
 }
