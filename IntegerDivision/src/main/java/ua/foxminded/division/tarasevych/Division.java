@@ -51,8 +51,8 @@ public class Division {
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
             while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
-                
-                if(variable == 0) {
+
+                if (variable == 0) {
                     System.out.println("index0 " + dividerLength);
                 }
                 variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++).toString()
@@ -140,10 +140,9 @@ public class Division {
                 spaceLeft++;
 
                 if (getAllDigits(dividend).get(spaceLeft) == 0) {
-                    while(getAllDigits(dividend).get(spaceLeft) == 0) {
-                        spaceLeft++; 
+                    while (getAllDigits(dividend).get(spaceLeft) == 0) {
+                        spaceLeft++;
                     }
-                    
                 }
             }
         }
