@@ -115,13 +115,13 @@ class DivisionTest {
         assertEquals("_1010101|1\n"
                 + " 1      |-------\n"
                 + " -      |1010101\n"
-                + "  _1\n"
+                + " _01\n"
                 + "   1\n"
                 + "   -\n"
-                + "    _1\n"
+                + "   _01\n"
                 + "     1\n"
                 + "     -\n"
-                + "      _1\n"
+                + "     _01\n"
                 + "       1\n"
                 + "       -\n"
                 + "       0\n", Division.longDivision(1010101, 1));
@@ -138,10 +138,10 @@ class DivisionTest {
                 + "  _1\n"
                 + "   1\n"
                 + "   -\n"
-                + "    _1\n"
+                + "   _01\n"
                 + "     1\n"
                 + "     -\n"
-                + "      _1\n"
+                + "     _01\n"
                 + "       1\n"
                 + "       -\n"
                 + "       _1\n"
@@ -209,9 +209,34 @@ class DivisionTest {
                 + "   _4\n"
                 + "    4\n"
                 + "    -\n"
-                + "     _4\n"
+                + "    _04\n"
                 + "      4\n"
                 + "      -\n"
-                + "      0", Division.longDivision(100404, 4));
+                + "      0\n", Division.longDivision(100404, 4));
+    }
+    
+    @Test
+    void test_120120120() {
+        assertEquals("_120120120|12\n"
+                + " 12       |--------\n"
+                + " --       |10010010\n"
+                + "  _012\n"
+                + "    12\n"
+                + "    --\n"
+                + "     _012\n"
+                + "       12\n"
+                + "       --\n"
+                + "        0\n", Division.longDivision(120120120, 12));
+    }
+    
+    @Test
+    void test_1000001() {
+        assertEquals("_1000001|1\n"
+                + " 1      |-------\n"
+                + " -      |1000001\n"
+                + " _000001\n"
+                + "       1\n"
+                + "       -\n"
+                + "       0\n", Division.longDivision(1000001, 1));
     }
 }
