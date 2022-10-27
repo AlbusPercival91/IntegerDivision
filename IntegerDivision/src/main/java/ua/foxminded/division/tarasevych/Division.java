@@ -50,10 +50,12 @@ public class Division {
             variable = Integer.parseInt(Math.abs(variable - subtraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
+            StringBuilder zero = new StringBuilder();
+
             while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
 
                 if (variable == 0) {
-                    System.out.println("index0 " + dividerLength);
+                    zero.append("0");
                 }
                 variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++).toString()
                         .replace("[", "").replace("]", "").replace(", ", "")));
@@ -61,7 +63,13 @@ public class Division {
             }
 
             if (subtraction > 0) {
-                Collections.addAll(buildList, " " + subtraction, "_" + variable);
+                if (!zero.isEmpty()) {
+                    Collections.addAll(buildList, " " + subtraction, "_" + zero + variable);
+                    zero.delete(0, zero.length());
+                } else {
+                    Collections.addAll(buildList, " " + subtraction, "_" + variable);
+                }
+
             }
         }
 
@@ -138,12 +146,6 @@ public class Division {
             if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
                     && i % 2 == 0) {
                 spaceLeft++;
-
-                if (getAllDigits(dividend).get(spaceLeft) == 0) {
-                    while (getAllDigits(dividend).get(spaceLeft) == 0) {
-                        spaceLeft++;
-                    }
-                }
             }
         }
         return stringBuilder.toString();
