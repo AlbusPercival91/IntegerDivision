@@ -37,6 +37,7 @@ public class Division {
     public static String longDivision(int dividend, int divider) {
         List<String> buildList = new ArrayList<>();
         StringBuilder resultBuilder = new StringBuilder();
+        StringBuilder zero = new StringBuilder();
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
         int subtraction = 0;
@@ -49,8 +50,6 @@ public class Division {
             subtraction = Math.abs(result * divider);
             variable = Integer.parseInt(Math.abs(variable - subtraction) + "".concat(getAllDigits(dividend)
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
-
-            StringBuilder zero = new StringBuilder();
 
             while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
 
@@ -81,7 +80,12 @@ public class Division {
             result = Integer.parseInt(resultBuilder.toString());
 
             if (subtraction > variable) {
-                Collections.addAll(buildList, " " + subtraction, " " + variable);
+                if (!zero.isEmpty()) {
+                    Collections.addAll(buildList, " " + subtraction, "_" + zero + variable);
+                    zero.delete(0, zero.length());
+                } else {
+                    Collections.addAll(buildList, " " + subtraction, "_" + variable);
+                }
             }
         }
         return converToView(buildList, dividend, divider, result);
@@ -147,6 +151,14 @@ public class Division {
                     && i % 2 == 0) {
                 spaceLeft++;
             }
+
+            if (involvedList.get(i) == divider && i % 2 != 0 && getAllDigits(dividend).get(spaceLeft) == 0) {
+                while (getAllDigits(dividend).get(spaceLeft) == 0) {
+                    spaceLeft++;
+                }
+            } 
+
+
         }
         return stringBuilder.toString();
     }
