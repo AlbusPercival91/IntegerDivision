@@ -117,13 +117,13 @@ class DivisionTest {
                 + " -      |1010101\n"
                 + " _01\n"
                 + "   1\n"
-                + "   -\n"
+                + "  --\n"
                 + "   _01\n"
                 + "     1\n"
-                + "     -\n"
+                + "    --\n"
                 + "     _01\n"
                 + "       1\n"
-                + "       -\n"
+                + "      --\n"
                 + "       0\n", Division.longDivision(1010101, 1));
     }
     
@@ -140,10 +140,10 @@ class DivisionTest {
                 + "   -\n"
                 + "   _01\n"
                 + "     1\n"
-                + "     -\n"
+                + "    --\n"
                 + "     _01\n"
                 + "       1\n"
-                + "       -\n"
+                + "      --\n"
                 + "       _1\n"
                 + "        1\n"
                 + "        -\n"
@@ -175,9 +175,9 @@ class DivisionTest {
                 + " _20\n"
                 + "  20\n"
                 + "  --\n"
-                + "    _4\n"
+                + "   _04\n"
                 + "     4\n"
-                + "     -\n"
+                + "    --\n"
                 + "     0\n", Division.longDivision(10004, 4));
     }
     
@@ -189,12 +189,12 @@ class DivisionTest {
                 + " _20\n"
                 + "  20\n"
                 + "  --\n"
-                + "    _4\n"
+                + "   _04\n"
                 + "     4\n"
-                + "     -\n"
-                + "      _4\n"
+                + "    --\n"
+                + "     _04\n"
                 + "       4\n"
-                + "       -\n"
+                + "      --\n"
                 + "       0\n", Division.longDivision(1000404, 4));
     }
     
@@ -211,7 +211,7 @@ class DivisionTest {
                 + "    -\n"
                 + "    _04\n"
                 + "      4\n"
-                + "      -\n"
+                + "     --\n"
                 + "      0\n", Division.longDivision(100404, 4));
     }
     
@@ -222,10 +222,10 @@ class DivisionTest {
                 + " --       |10010010\n"
                 + "  _012\n"
                 + "    12\n"
-                + "    --\n"
+                + "   ---\n"
                 + "     _012\n"
                 + "       12\n"
-                + "       --\n"
+                + "      ---\n"
                 + "        0\n", Division.longDivision(120120120, 12));
     }
     
@@ -236,7 +236,7 @@ class DivisionTest {
                 + " -      |1000001\n"
                 + " _000001\n"
                 + "       1\n"
-                + "       -\n"
+                + "  ------\n"
                 + "       0\n", Division.longDivision(1000001, 1));
     }
 }

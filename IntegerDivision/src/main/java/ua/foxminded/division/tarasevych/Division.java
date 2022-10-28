@@ -131,10 +131,22 @@ public class Division {
             }
 
             if (i >= 1) {
+                int count = 0;
                 String value = list.get(i);
 
                 if (value.contains("_") && i == list.size() - 1) {
                     value = list.get(list.size() - 1).replace("_", " ");
+                }
+
+                if (value.startsWith(" ") && list.get(i - 1).startsWith("_0")) {
+                    String[] zeroArray = list.get(i - 1).replace("_", "").split("");
+
+                    for (int j = 0; j < zeroArray.length; j++) {
+                        if (zeroArray[j].equals("0")) {
+                            count++;
+                        }
+                    }
+                    value = String.format("%s%s", String.join("", Collections.nCopies(count, " ")), list.get(i));
                 }
 
                 stringBuilder.append(
@@ -144,6 +156,9 @@ public class Division {
                     stringBuilder.append(
                             String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(spaceLeft, " ")),
                                     String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-"))));
+                    if (count > 0) {
+                        spaceLeft += count;
+                    }
                 }
             }
 
@@ -152,13 +167,11 @@ public class Division {
                 spaceLeft++;
             }
 
-            if (involvedList.get(i) == divider && i % 2 != 0 && getAllDigits(dividend).get(spaceLeft) == 0) {
-                while (getAllDigits(dividend).get(spaceLeft) == 0) {
-                    spaceLeft++;
-                }
-            } 
-
-
+//            if (involvedList.get(i) == divider && i % 2 != 0 && getAllDigits(dividend).get(spaceLeft) == 0) {
+//                while (getAllDigits(dividend).get(spaceLeft) == 0) {
+//                    spaceLeft++;
+//                }
+//            } 
         }
         return stringBuilder.toString();
     }
