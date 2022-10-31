@@ -157,7 +157,7 @@ class DivisionTest {
     void test_1004() {
         assertEquals("_1004|4\n"
                 + "  8  |---\n"
-                + "  -  |251\n"
+                + " --  |251\n"
                 + " _20\n"
                 + "  20\n"
                 + "  --\n"
@@ -171,7 +171,7 @@ class DivisionTest {
     void test_10004() {
         assertEquals("_10004|4\n"
                 + "  8   |----\n"
-                + "  -   |2501\n"
+                + " --   |2501\n"
                 + " _20\n"
                 + "  20\n"
                 + "  --\n"
@@ -185,7 +185,7 @@ class DivisionTest {
     void test_1000404() {
         assertEquals("_1000404|4\n"
                 + "  8     |------\n"
-                + "  -     |250101\n"
+                + " --     |250101\n"
                 + " _20\n"
                 + "  20\n"
                 + "  --\n"
@@ -202,7 +202,7 @@ class DivisionTest {
     void test_100404() {
         assertEquals("_100404|4\n"
                 + "  8    |-----\n"
-                + "  -    |25101\n"
+                + " --    |25101\n"
                 + " _20\n"
                 + "  20\n"
                 + "  --\n"
@@ -239,4 +239,21 @@ class DivisionTest {
                 + "  ------\n"
                 + "       0\n", Division.longDivision(1000001, 1));
     }
+    
+    @Test
+    void test_1000404_5() {
+        assertEquals("_1000404|5\n"
+                + " 10     |------\n"
+                + " --     |200080\n"
+                + "  _0040\n"
+                + "     40\n"
+                + "   ----\n"
+                + "       4\n", Division.longDivision(1000404, 5));
+    }
+    
+//    @Test
+//    void test_12345_0() {
+//       assertThrows("sdf", Division.longDivision(1000404, 5));
+//
+//    }
 }
