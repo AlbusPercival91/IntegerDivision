@@ -41,23 +41,23 @@ public class Division {
         int dividerLength = String.valueOf(divider).length();
         int result = 0;
         int subtraction = 0;
-        int variable = Integer.parseInt(getAllDigits(dividend).subList(0, dividerLength).toString().replace("[", "")
-                .replace("]", "").replace(", ", ""));
+        int variable = Integer.parseInt(getAllDigits(Math.abs(dividend)).subList(0, dividerLength).toString()
+                .replace("[", "").replace("]", "").replace(", ", ""));
 
-        while (dividerLength != getAllDigits(dividend).size()) {
-            result = Math.abs(variable / divider);
+        while (dividerLength != getAllDigits(Math.abs(dividend)).size()) {
+            result = Math.abs(variable / Math.abs(divider));
             resultBuilder.append(result);
-            subtraction = Math.abs(result * divider);
-            variable = Integer.parseInt(Math.abs(variable - subtraction) + "".concat(getAllDigits(dividend)
+            subtraction = Math.abs(result * Math.abs(divider));
+            variable = Integer.parseInt(variable - subtraction + "".concat(getAllDigits(Math.abs(dividend))
                     .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
-            while (variable < divider && dividerLength != getAllDigits(dividend).size()) {
+            while (variable < divider && dividerLength != getAllDigits(Math.abs(dividend)).size()) {
 
                 if (variable == 0) {
                     zero.append("0");
                 }
-                variable = Integer.parseInt(variable + "".concat(getAllDigits(dividend).get(dividerLength++).toString()
-                        .replace("[", "").replace("]", "").replace(", ", "")));
+                variable = Integer.parseInt(variable + "".concat(getAllDigits(Math.abs(dividend)).get(dividerLength++)
+                        .toString().replace("[", "").replace("]", "").replace(", ", "")));
                 resultBuilder.append(0);
             }
 
@@ -66,9 +66,9 @@ public class Division {
             }
         }
 
-        if (dividerLength == getAllDigits(dividend).size()) {
-            result = Math.abs(variable / divider);
-            subtraction = Math.abs(result * divider);
+        if (dividerLength == getAllDigits(Math.abs(dividend)).size()) {
+            result = Math.abs(variable / Math.abs(divider));
+            subtraction = Math.abs(result * Math.abs(divider));
             variable -= Math.abs(subtraction);
             resultBuilder.append(result);
             result = Integer.parseInt(resultBuilder.toString());
@@ -77,7 +77,7 @@ public class Division {
                 collectData(buildList, zero, variable, subtraction);
             }
         }
-        return converToView(buildList, dividend, divider, result);
+        return converToView(buildList, Math.abs(dividend), Math.abs(divider), result);
     }
 
     private static void collectData(List<String> buildList, StringBuilder zero, int variable, int subtraction) {
