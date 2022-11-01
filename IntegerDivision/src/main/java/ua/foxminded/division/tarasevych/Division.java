@@ -38,7 +38,7 @@ public class Division {
         List<String> buildList = new ArrayList<>();
         StringBuilder resultBuilder = new StringBuilder();
         StringBuilder zero = new StringBuilder();
-        int dividerLength = String.valueOf(divider).length();
+        int dividerLength = String.valueOf(Math.abs(divider)).length();
         int result = 0;
         int subtraction = 0;
         int variable = Integer.parseInt(getAllDigits(Math.abs(dividend)).subList(0, dividerLength).toString()
