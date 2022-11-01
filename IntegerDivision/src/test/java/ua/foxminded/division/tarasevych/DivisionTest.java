@@ -250,5 +250,40 @@ class DivisionTest {
                 + "   ----\n"
                 + "       4\n", Division.longDivision(1000404, 5));
     }
+    
+    @Test
+    void test_123_1234() {
+        assertEquals("_123|1234\n"
+                + " 0  |-\n"
+                + " -  |0\n"
+                + " 0\n", Division.longDivision(123, 1234));
+    }
+    
+    @Test
+    void test_0_1234() {
+        assertEquals("_0|1234\n"
+                + " 0|-\n"
+                + " -|0\n"
+                + " 0\n", Division.longDivision(0, 1234));
+    }
+    
+    @Test
+    void test_1000404_minus5() {
+        assertEquals("_1000404|5\n"
+                + " 10     |------\n"
+                + " --     |200080\n"
+                + "  _0040\n"
+                + "     40\n"
+                + "   ----\n"
+                + "       4\n", Division.longDivision(1000404, -5));
+    }
+    
+    @Test
+    void test_78_910() {
+        assertEquals("_78|910\n"
+                + " 0 |-\n"
+                + " - |0\n"
+                + " 0\n", Division.longDivision(78, 910));
+    }
    
 }
