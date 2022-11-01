@@ -15,8 +15,8 @@ public class LongDivision {
         logger.info("For quit write \"q or Q\" \n");
         
         try (Scanner scan = new Scanner(System.in)) {
-            int dividend = -1;
-            int divider = -1;
+            int dividend = 0;
+            int divider = 0;
 
             try {
                 while (!String.valueOf(dividend).equalsIgnoreCase("q")) {

@@ -250,10 +250,5 @@ class DivisionTest {
                 + "   ----\n"
                 + "       4\n", Division.longDivision(1000404, 5));
     }
-    
-//    @Test
-//    void test_12345_0() {
-//       assertThrows("sdf", Division.longDivision(1000404, 5));
-//
-//    }
+   
 }
