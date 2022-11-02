@@ -21,15 +21,13 @@ public class LongDivision {
                     int dividend = scan.nextInt();
                     int divider = scan.nextInt();
                     logger.info(Division.longDivision(dividend, divider));
-                    scan.reset();
                 }
             } catch (InputMismatchException e) {
                 if (scan.next().equalsIgnoreCase("q")) {
                     exit = true;
                     logger.error("Exit OK");
-
                 } else {
-                    logger.error("Invalid Input");
+                    logger.error("Invalid value");
                     scan.reset();
                 }
             }
