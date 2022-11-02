@@ -14,14 +14,12 @@ public class LongDivision {
         logger.info("For quit type \"q or Q\" \n");
         boolean exit = false;
         Scanner scan = new Scanner(System.in);
-        int dividend = 0;
-        int divider = 0;
 
         while (!exit) {
             try {
                 while (scan.hasNext()) {
-                    dividend = scan.nextInt();
-                    divider = scan.nextInt();
+                    int dividend = scan.nextInt();
+                    int divider = scan.nextInt();
                     logger.info(Division.longDivision(dividend, divider));
                     scan.reset();
                 }
