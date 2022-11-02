@@ -10,7 +10,7 @@ public class Division {
 
     }
 
-    public static List<Integer> getAllDigits(int dividend) {
+    private static List<Integer> getAllDigits(int dividend) {
         List<Integer> digitArray = new ArrayList<>();
 
         while (dividend > 0) {
@@ -21,7 +21,7 @@ public class Division {
         return digitArray;
     }
 
-    public static int concatDigits(int dividend, int conditionBreak) {
+    private static int concatDigits(int dividend, int conditionBreak) {
         int result = 0;
 
         for (Integer i : getAllDigits(dividend)) {
@@ -41,6 +41,10 @@ public class Division {
         int dividerLength = String.valueOf(Math.abs(divider)).length();
         int result = 0;
         int subtraction = 0;
+        
+        if(Math.abs(divider) == 0) {
+            return "Divider can't be zero!";
+        }
 
         if (Math.abs(dividend) >= Math.abs(divider)) {
             int variable = Integer.parseInt(getAllDigits(Math.abs(dividend)).subList(0, dividerLength).toString()
@@ -62,10 +66,7 @@ public class Division {
                             .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
                     resultBuilder.append(0);
                 }
-
-                if (subtraction > 0) {
-                    collectData(buildList, zero, variable, subtraction);
-                }
+                filterData(buildList, zero, variable, subtraction);
             }
 
             if (dividerLength == getAllDigits(Math.abs(dividend)).size()) {
@@ -75,16 +76,14 @@ public class Division {
                 resultBuilder.append(result);
                 result = Integer.parseInt(resultBuilder.toString());
 
-                if (subtraction > variable) {
-                    collectData(buildList, zero, variable, subtraction);
-                }
+                filterData(buildList, zero, variable, subtraction);
             }
-            return converToView(buildList, Math.abs(dividend), Math.abs(divider), result);
+            return convertToView(buildList, Math.abs(dividend), Math.abs(divider), result);
         } else {
             List<String> zeroList = new ArrayList<>();
             StringBuilder str = new StringBuilder();
             collectData(zeroList, str, 0, 0);
-            return converToView(zeroList, Math.abs(dividend), Math.abs(divider), result);
+            return convertToView(zeroList, Math.abs(dividend), Math.abs(divider), result);
         }
     }
 
@@ -97,7 +96,13 @@ public class Division {
         }
     }
 
-    public static String converToView(List<String> list, int dividend, int divider, int result) {
+    private static void filterData(List<String> dataList, StringBuilder zero, int variable, int subtraction) {
+        if (subtraction > 0) {
+            collectData(dataList, zero, variable, subtraction);
+        }
+    }
+
+    private static String convertToView(List<String> list, int dividend, int divider, int result) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
         List<Integer> leftSpaceList = new ArrayList<>();

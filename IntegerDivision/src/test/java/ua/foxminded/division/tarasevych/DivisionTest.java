@@ -285,5 +285,25 @@ class DivisionTest {
                 + " - |0\n"
                 + " 0\n", Division.longDivision(78, 910));
     }
+    
+    @Test
+    void test_78_0() {
+        assertEquals("Divider can't be zero!", Division.longDivision(78, 0));
+    }
+    
+    @Test
+    void test_10004004_0() {
+        assertEquals("Divider can't be zero!", Division.longDivision(10004004, 0));
+    }
+    
+    @Test
+    void test_0_0() {
+        assertEquals("Divider can't be zero!", Division.longDivision(0, 0));
+    }
+    
+    @Test
+    void test_min12345_0() {
+        assertEquals("Divider can't be zero!", Division.longDivision(-12345, 0));
+    }
    
 }
