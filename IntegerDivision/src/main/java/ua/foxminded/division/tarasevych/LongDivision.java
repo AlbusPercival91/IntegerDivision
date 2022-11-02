@@ -11,21 +11,31 @@ public class LongDivision {
     public static void main(String... args) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         PropertyConfigurator.configure(classLoader.getResource("log4j.properties "));
-        logger.info("For quit write \"q or Q\" \n");
+        logger.info("For quit type \"q or Q\" \n");
+        boolean exit = false;
         Scanner scan = new Scanner(System.in);
+        int dividend = 0;
+        int divider = 0;
 
-        try {
-            int dividend = 0;
-            int divider = 0;
-            while (!String.valueOf(dividend).equalsIgnoreCase("q")) {
-                dividend = scan.nextInt();
-                divider = scan.nextInt();
-                logger.info(Division.longDivision(dividend, divider));
+        while (!exit) {
+            try {
+                while (scan.hasNext()) {
+                    dividend = scan.nextInt();
+                    divider = scan.nextInt();
+                    logger.info(Division.longDivision(dividend, divider));
+                    scan.reset();
+                }
+            } catch (InputMismatchException e) {
+                if (scan.next().equalsIgnoreCase("q")) {
+                    exit = true;
+                    logger.error("Exit OK");
+
+                } else {
+                    logger.error("Invalid Input");
+                    scan.reset();
+                }
             }
-        } catch (InputMismatchException e) {
-            scan.close();
-            logger.info("exit OK");
-            System.exit(0);
         }
+        scan.close();
     }
 }
