@@ -28,7 +28,6 @@ public class LongDivision {
                     logger.error("Exit OK");
                 } else {
                     logger.error("Invalid value");
-                    scan.reset();
                 }
             }
         }

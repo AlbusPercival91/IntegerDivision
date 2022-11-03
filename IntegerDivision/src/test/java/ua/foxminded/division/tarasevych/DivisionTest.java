@@ -1,13 +1,12 @@
 package ua.foxminded.division.tarasevych;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 class DivisionTest {
 
     @Test
-    void test_4() {
+    void testIfDividerHasOneDigitLessThanFirstVariable() {
         assertEquals("_78945|4\n"
                 + " 4    |-----\n"
                 + " -    |19736\n"
@@ -27,7 +26,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_99() {
+    void testIfDividerHasTwoEqualDigitsGreaterThanFirstVariable() {
         assertEquals("_78945|99\n"
                 + " 693  |---\n"
                 + " ---  |797\n"
@@ -41,7 +40,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_66() {
+    void testIfDividerHasTwoEqualDigitsLessThanFirstVariable() {
         assertEquals("_78945|66\n"
                 + " 66   |----\n"
                 + " --   |1196\n"
@@ -58,7 +57,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_65() {
+    void testIfDividerHasTwoDigitsLessThanFirstVariable() {
         assertEquals("_78945|65\n"
                 + " 65   |----\n"
                 + " --   |1214\n"
@@ -75,7 +74,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_77() {
+    void testIfDividerHasTwoEqualDigitsCloseLessThanFirstVariable() {
         assertEquals("_78945|77\n"
                 + " 77   |----\n"
                 + " --   |1025\n"
@@ -89,7 +88,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_12345() {
+    void testIfDividerAndVariableIsEquals() {
         assertEquals("_12345|1\n"
                 + " 1    |-----\n"
                 + " -    |12345\n"
@@ -111,7 +110,7 @@ class DivisionTest {
     
     
     @Test
-    void test_1010101() {
+    void testIfDividerAndVariableIsEqualsWithZeroes() {
         assertEquals("_1010101|1\n"
                 + " 1      |-------\n"
                 + " -      |1010101\n"
@@ -128,7 +127,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_111010111() {
+    void testIfDividerAndFewDividendDigitsIsEqualsWithZero() {
         assertEquals("_111010111|1\n"
                 + " 1        |---------\n"
                 + " -        |111010111\n"
@@ -154,7 +153,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_1004() {
+    void testIfTwoZeroesInDividendAndLastDigitEqualsDivider() {
         assertEquals("_1004|4\n"
                 + "  8  |---\n"
                 + " --  |251\n"
@@ -168,7 +167,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_10004() {
+    void testIfThreeZeroesInDividendAndLastDigitEqualsDivider() {
         assertEquals("_10004|4\n"
                 + "  8   |----\n"
                 + " --   |2501\n"
@@ -182,7 +181,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_1000404() {
+    void testIfZeroesInDividendAndLastDigitEqualsDivider() {
         assertEquals("_1000404|4\n"
                 + "  8     |------\n"
                 + " --     |250101\n"
@@ -199,24 +198,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_100404() {
-        assertEquals("_100404|4\n"
-                + "  8    |-----\n"
-                + " --    |25101\n"
-                + " _20\n"
-                + "  20\n"
-                + "  --\n"
-                + "   _4\n"
-                + "    4\n"
-                + "    -\n"
-                + "    _04\n"
-                + "      4\n"
-                + "     --\n"
-                + "      0\n", Division.longDivision(100404, 4));
-    }
-    
-    @Test
-    void test_120120120() {
+    void testIfDividerEqualsAllVariablesSeparateByZero() {
         assertEquals("_120120120|12\n"
                 + " 12       |--------\n"
                 + " --       |10010010\n"
@@ -230,7 +212,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_1000001() {
+    void test_testIfFirstAndLastDigitEqualDividerSeparateByZero() {
         assertEquals("_1000001|1\n"
                 + " 1      |-------\n"
                 + " -      |1000001\n"
@@ -241,7 +223,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_1000404_5() {
+    void testIfDividerNotEqualsVariablesSeparateByZeroes() {
         assertEquals("_1000404|5\n"
                 + " 10     |------\n"
                 + " --     |200080\n"
@@ -252,7 +234,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_123_1234() {
+    void testIfDividerGreaterThanDividendWithSameDigits() {
         assertEquals("_123|1234\n"
                 + " 0  |-\n"
                 + " -  |0\n"
@@ -260,7 +242,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_0_1234() {
+    void testIfDividendIsZero() {
         assertEquals("_0|1234\n"
                 + " 0|-\n"
                 + " -|0\n"
@@ -268,7 +250,7 @@ class DivisionTest {
     }
     
     @Test
-    void test_1000404_minus5() {
+    void testIfDividerIsNegative() {
         assertEquals("_1000404|5\n"
                 + " 10     |------\n"
                 + " --     |200080\n"
@@ -279,30 +261,25 @@ class DivisionTest {
     }
     
     @Test
-    void test_78_910() {
+    void testIfDividendIsNegative() {
         assertEquals("_78|910\n"
                 + " 0 |-\n"
                 + " - |0\n"
-                + " 0\n", Division.longDivision(78, 910));
+                + " 0\n", Division.longDivision(-78, 910));
     }
     
     @Test
-    void test_78_0() {
+    void testIfDividerIsZero() {
         assertEquals("Divider can't be zero!", Division.longDivision(78, 0));
     }
     
     @Test
-    void test_10004004_0() {
-        assertEquals("Divider can't be zero!", Division.longDivision(10004004, 0));
-    }
-    
-    @Test
-    void test_0_0() {
+    void testIfDividerAndDividendIsZero() {
         assertEquals("Divider can't be zero!", Division.longDivision(0, 0));
     }
     
     @Test
-    void test_min12345_0() {
+    void testIfNegativeDividendAndDividerIsZero() {
         assertEquals("Divider can't be zero!", Division.longDivision(-12345, 0));
     }
    
