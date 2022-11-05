@@ -48,7 +48,7 @@ public class Division {
             throw new ArithmeticException("/ by zero");
         }
 
-        if (data.getDividend() >= data.getDivider() && data.getDividend() != 0 && data.getDivider() != 0) {
+        if (data.getDividend() >= data.getDivider()) {
             int variable = Integer.parseInt(getAllDigits(data.getDividend()).subList(0, dividerLength).toString()
                     .replace("[", "").replace("]", "").replace(", ", ""));
 
