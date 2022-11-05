@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Division {
+public class Division extends IntegerData {
 
     private Division() {
 
@@ -34,7 +34,7 @@ public class Division {
         return result;
     }
 
-    public static String longDivision(int dividend, int divider) {
+    public static IntegerData longDivision(int dividend, int divider) {
         IntegerData data = new IntegerData();
         data.setDividend(Math.abs(dividend));
         data.setDivider(Math.abs(divider));
@@ -94,7 +94,7 @@ public class Division {
                     }
                 }
             }
-            return convertToView(data);
+            return data;
         } else {
             if (!zero.isEmpty()) {
                 Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + 0);
@@ -102,11 +102,11 @@ public class Division {
             } else {
                 Collections.addAll(data.getBuildList(), " " + subtraction, "_" + 0);
             }
-            return convertToView(data);
+            return data;
         }
     }
 
-    private static String convertToView(IntegerData data) {
+    public static String convertToView(IntegerData data) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
         List<Integer> leftSpaceList = new ArrayList<>();
