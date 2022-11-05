@@ -80,10 +80,10 @@ public class Division {
 
                 filterData(buildList, zero, variable, subtraction);
             }
-            return convertToView(buildList, Math.abs(dividend), Math.abs(divider), data.getResult());
+            return convertToView(buildList, data);
         } else {
             collectData(buildList, zero, 0, 0);
-            return convertToView(buildList, Math.abs(dividend), Math.abs(divider), data.getResult());
+            return convertToView(buildList, data);
         }
     }
 
@@ -102,24 +102,24 @@ public class Division {
         }
     }
 
-    private static String convertToView(List<String> list, int dividend, int divider, int result) {
+    private static String convertToView(List<String> list, IntegerData data) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
         List<Integer> leftSpaceList = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder("_" + dividend + "|" + divider + "\n");
-        int resultLength = String.valueOf(result).length();
-        involvedList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
-        subtractList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
+        StringBuilder stringBuilder = new StringBuilder("_" + data.getDividend() + "|" + data.getDivider() + "\n");
+        int resultLength = String.valueOf(data.getResult()).length();
+        involvedList.add(concatDigits(data.getDividend(), Integer.parseInt(list.get(0).trim())));
+        subtractList.add(concatDigits(data.getDividend(), Integer.parseInt(list.get(0).trim())));
         int spaceLeft = 0;
 
         for (int i = 0; i < list.size(); i++) {
             spaceLeft = makeSpaceLeft(list, involvedList, subtractList, leftSpaceList, spaceLeft, i);
 
             if (i < 1) {
-                int spaceMiddle = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length();
+                int spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length();
 
                 if (leftSpaceList.get(i) > 0) {
-                    spaceMiddle = String.valueOf(dividend).length() - String.valueOf(list.get(i)).length() - 1;
+                    spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length() - 1;
                 }
                 int underLines = String.valueOf(list.get(i)).length() - 1;
                 int spaceLeftCorr = String.valueOf(involvedList.get(i)).length()
@@ -135,7 +135,7 @@ public class Division {
 
                 stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft - spaceLeftCorr, " "))
                         + String.join("", Collections.nCopies(underLines, "-"))
-                        + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|" + result + "\n");
+                        + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|" + data.getResult() + "\n");
             }
 
             if (i >= 1) {
