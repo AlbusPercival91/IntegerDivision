@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Division extends IntegerData {
+public class Division {
 
     private Division() {
 
@@ -106,7 +106,7 @@ public class Division extends IntegerData {
         }
     }
 
-    public static String convertToView(IntegerData data) {
+    public static String divisionDraw(IntegerData data) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
         List<Integer> leftSpaceList = new ArrayList<>();
@@ -117,7 +117,16 @@ public class Division extends IntegerData {
         int spaceLeft = 0;
 
         for (int i = 0; i < data.getBuildList().size(); i++) {
-            spaceLeft = makeSpaceLeft(data.getBuildList(), involvedList, subtractList, leftSpaceList, spaceLeft, i);
+
+            if (i % 2 == 0) {
+                Collections.addAll(involvedList, Integer.parseInt(data.getBuildList().get(i).replace("_", "").trim()),
+                        Integer.parseInt(data.getBuildList().get(i + 1).replace("_", "").trim()));
+                Collections.addAll(subtractList, involvedList.get(i + 1),
+                        involvedList.get(i) - involvedList.get(i + 1));
+            }
+            leftSpaceList.add(
+                    String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
+            spaceLeft += leftSpaceList.get(i);
 
             if (i < 1) {
                 int spaceMiddle = String.valueOf(data.getDividend()).length()
@@ -145,10 +154,34 @@ public class Division extends IntegerData {
             }
 
             if (i >= 1) {
-                int countZero = zeroCounter(data.getBuildList(), i);
+                int countZero = 0;
+
+                if (data.getBuildList().get(i).startsWith(" ") && data.getBuildList().get(i - 1).startsWith("_0")) {
+                    String[] zeroArray = data.getBuildList().get(i - 1).replace("_", "").split("");
+
+                    for (String s : zeroArray) {
+                        if (s.equals("0")) {
+                            countZero++;
+                        } else if (!s.equals("0")) {
+                            break;
+                        }
+                    }
+                }
                 String value = String.join("", Collections.nCopies(countZero, " ")) + data.getBuildList().get(i);
 
-                spaceLeft = makePostHeader(data.getBuildList(), stringBuilder, spaceLeft, i, countZero, value);
+                if (value.contains("_") && i == data.getBuildList().size() - 1) {
+                    value = data.getBuildList().get(data.getBuildList().size() - 1).replace("_", " ");
+                }
+                stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + value + "\n");
+
+                if (i % 2 == 0) {
+                    stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft, " "))
+                            + String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-")) + "\n");
+
+                    if (countZero > 0) {
+                        spaceLeft += countZero;
+                    }
+                }
             }
 
             if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
@@ -157,54 +190,5 @@ public class Division extends IntegerData {
             }
         }
         return stringBuilder.toString();
-    }
-
-    private static int makeSpaceLeft(List<String> list, List<Integer> involvedList, List<Integer> subtractList,
-            List<Integer> leftSpaceList, int spaceLeft, int i) {
-        if (i % 2 == 0) {
-            Collections.addAll(involvedList, Integer.parseInt(list.get(i).replace("_", "").trim()),
-                    Integer.parseInt(list.get(i + 1).replace("_", "").trim()));
-            Collections.addAll(subtractList, involvedList.get(i + 1), involvedList.get(i) - involvedList.get(i + 1));
-        }
-        leftSpaceList
-                .add(String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
-        spaceLeft += leftSpaceList.get(i);
-        return spaceLeft;
-    }
-
-    private static int makePostHeader(List<String> list, StringBuilder stringBuilder, int spaceLeft, int i,
-            int countZero, String value) {
-
-        if (value.contains("_") && i == list.size() - 1) {
-            value = list.get(list.size() - 1).replace("_", " ");
-        }
-        stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + value + "\n");
-
-        if (i % 2 == 0) {
-            stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft, " "))
-                    + String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-")) + "\n");
-
-            if (countZero > 0) {
-                spaceLeft += countZero;
-            }
-        }
-        return spaceLeft;
-    }
-
-    private static int zeroCounter(List<String> list, int i) {
-        int countZero = 0;
-
-        if (list.get(i).startsWith(" ") && list.get(i - 1).startsWith("_0")) {
-            String[] zeroArray = list.get(i - 1).replace("_", "").split("");
-
-            for (String s : zeroArray) {
-                if (s.equals("0")) {
-                    countZero++;
-                } else if (!s.equals("0")) {
-                    break;
-                }
-            }
-        }
-        return countZero;
     }
 }
