@@ -41,8 +41,8 @@ public class Division {
         int dividerLength = String.valueOf(Math.abs(divider)).length();
         int result = 0;
         int subtraction = 0;
-        
-        if(Math.abs(divider) == 0) {
+
+        if (Math.abs(divider) == 0) {
             return "Divider can't be zero!";
         }
 
@@ -106,7 +106,7 @@ public class Division {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
         List<Integer> leftSpaceList = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder(String.format("_%d|%d" + "\n", dividend, divider));
+        StringBuilder stringBuilder = new StringBuilder("_" + dividend + "|" + divider + "\n");
         int resultLength = String.valueOf(result).length();
         involvedList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
         subtractList.add(concatDigits(dividend, Integer.parseInt(list.get(0).trim())));
@@ -129,20 +129,18 @@ public class Division {
                     underLines = String.valueOf(list.get(i)).length();
                 }
 
-                stringBuilder.append(String.format("%s" + "%s" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(spaceLeft, " ")), list.get(i),
-                        String.join("", Collections.nCopies(spaceMiddle + 1, " ")), "|",
-                        String.join("", Collections.nCopies(resultLength, "-"))));
+                stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + list.get(i)
+                        + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|"
+                        + String.join("", Collections.nCopies(resultLength, "-")) + "\n");
 
-                stringBuilder.append(String.format(String.format("%s" + " %s" + "%s" + "%s" + "%s" + "\n",
-                        String.join("", Collections.nCopies(spaceLeft - spaceLeftCorr, " ")),
-                        String.join("", Collections.nCopies(underLines, "-")),
-                        String.join("", Collections.nCopies(spaceMiddle + 1, " ")), "|", result)));
+                stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft - spaceLeftCorr, " "))
+                        + String.join("", Collections.nCopies(underLines, "-"))
+                        + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|" + result + "\n");
             }
 
             if (i >= 1) {
                 int countZero = zeroCounter(list, i);
-                String value = String.format("%s%s", String.join("", Collections.nCopies(countZero, " ")), list.get(i));
+                String value = String.join("", Collections.nCopies(countZero, " ")) + list.get(i);
 
                 spaceLeft = makePostHeader(list, stringBuilder, spaceLeft, i, countZero, value);
             }
@@ -174,13 +172,12 @@ public class Division {
         if (value.contains("_") && i == list.size() - 1) {
             value = list.get(list.size() - 1).replace("_", " ");
         }
-        stringBuilder
-                .append(String.format("%s" + "%s" + "\n", String.join("", Collections.nCopies(spaceLeft, " ")), value));
+        stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + value + "\n");
 
         if (i % 2 == 0) {
-            stringBuilder
-                    .append(String.format(" %s" + "%s" + "\n", String.join("", Collections.nCopies(spaceLeft, " ")),
-                            String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-"))));
+            stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft, " "))
+                    + String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-")) + "\n");
+           
             if (countZero > 0) {
                 spaceLeft += countZero;
             }
