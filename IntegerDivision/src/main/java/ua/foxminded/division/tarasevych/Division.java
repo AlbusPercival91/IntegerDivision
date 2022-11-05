@@ -45,10 +45,10 @@ public class Division {
         int subtraction = 0;
 
         if (data.getDivider() == 0) {
-            return "Divider can't be zero!";
+            throw new ArithmeticException("/ by zero");
         }
 
-        if (data.getDividend() >= data.getDivider()) {
+        if (data.getDividend() >= data.getDivider() && data.getDividend() != 0 && data.getDivider() != 0) {
             int variable = Integer.parseInt(getAllDigits(data.getDividend()).subList(0, dividerLength).toString()
                     .replace("[", "").replace("]", "").replace(", ", ""));
 
@@ -119,7 +119,8 @@ public class Division {
                 int spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length();
 
                 if (leftSpaceList.get(i) > 0) {
-                    spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length() - 1;
+                    spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length()
+                            - 1;
                 }
                 int underLines = String.valueOf(list.get(i)).length() - 1;
                 int spaceLeftCorr = String.valueOf(involvedList.get(i)).length()

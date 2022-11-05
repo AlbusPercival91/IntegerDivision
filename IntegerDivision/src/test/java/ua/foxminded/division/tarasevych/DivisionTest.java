@@ -270,17 +270,23 @@ class DivisionTest {
     
     @Test
     void testIfDividerIsZero() {
-        assertEquals("Divider can't be zero!", Division.longDivision(78, 0));
+        Exception exception = assertThrows(ArithmeticException.class, () ->
+        Division.longDivision(78, 0));
+    assertEquals("/ by zero", exception.getMessage());
     }
     
     @Test
-    void testIfDividerAndDividendIsZero() {
-        assertEquals("Divider can't be zero!", Division.longDivision(0, 0));
+    void testIfDividerAndDividendIsZero() { 
+        Exception exception = assertThrows(ArithmeticException.class, () ->
+        Division.longDivision(0, 0));
+    assertEquals("/ by zero", exception.getMessage());
     }
     
     @Test
     void testIfNegativeDividendAndDividerIsZero() {
-        assertEquals("Divider can't be zero!", Division.longDivision(-12345, 0));
+        Exception exception = assertThrows(ArithmeticException.class, () ->
+        Division.longDivision(-12345, 0));
+    assertEquals("/ by zero", exception.getMessage());
     }
    
 }

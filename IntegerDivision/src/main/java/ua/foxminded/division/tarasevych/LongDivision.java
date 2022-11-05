@@ -29,6 +29,8 @@ public class LongDivision {
                 } else {
                     logger.error("Invalid value");
                 }
+            } catch (ArithmeticException e) {
+                logger.error("Divider can't be zero!");
             }
         }
         scan.close();
