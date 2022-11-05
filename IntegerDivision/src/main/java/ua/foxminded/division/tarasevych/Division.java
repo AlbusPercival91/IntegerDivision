@@ -35,55 +35,55 @@ public class Division {
     }
 
     public static String longDivision(int dividend, int divider) {
+        IntegerData data = new IntegerData();
+        data.setDividend(Math.abs(dividend));
+        data.setDivider(Math.abs(divider));
         List<String> buildList = new ArrayList<>();
         StringBuilder resultBuilder = new StringBuilder();
         StringBuilder zero = new StringBuilder();
-        int dividerLength = String.valueOf(Math.abs(divider)).length();
-        int result = 0;
+        int dividerLength = String.valueOf(data.getDivider()).length();
         int subtraction = 0;
 
-        if (Math.abs(divider) == 0) {
+        if (data.getDivider() == 0) {
             return "Divider can't be zero!";
         }
 
-        if (Math.abs(dividend) >= Math.abs(divider)) {
-            int variable = Integer.parseInt(getAllDigits(Math.abs(dividend)).subList(0, dividerLength).toString()
+        if (data.getDividend() >= data.getDivider()) {
+            int variable = Integer.parseInt(getAllDigits(data.getDividend()).subList(0, dividerLength).toString()
                     .replace("[", "").replace("]", "").replace(", ", ""));
 
-            while (dividerLength != getAllDigits(Math.abs(dividend)).size()) {
-                result = Math.abs(variable / Math.abs(divider));
-                resultBuilder.append(result);
-                subtraction = Math.abs(result * Math.abs(divider));
-                variable = Integer.parseInt(variable - subtraction + "".concat(getAllDigits(Math.abs(dividend))
+            while (dividerLength != getAllDigits(data.getDividend()).size()) {
+                data.setResult(variable / data.getDivider());
+                resultBuilder.append(data.getResult());
+                subtraction = data.getResult() * data.getDivider();
+                variable = Integer.parseInt(variable - subtraction + "".concat(getAllDigits(data.getDividend())
                         .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
 
-                while (variable < Math.abs(divider) && dividerLength != getAllDigits(Math.abs(dividend)).size()) {
+                while (variable < data.getDivider() && dividerLength != getAllDigits(data.getDividend()).size()) {
 
                     if (variable == 0) {
                         zero.append("0");
                     }
-                    variable = Integer.parseInt(variable + "".concat(getAllDigits(Math.abs(dividend))
+                    variable = Integer.parseInt(variable + "".concat(getAllDigits(data.getDividend())
                             .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
                     resultBuilder.append(0);
                 }
                 filterData(buildList, zero, variable, subtraction);
             }
 
-            if (dividerLength == getAllDigits(Math.abs(dividend)).size()) {
-                result = Math.abs(variable / Math.abs(divider));
-                subtraction = Math.abs(result * Math.abs(divider));
-                variable -= Math.abs(subtraction);
-                resultBuilder.append(result);
-                result = Integer.parseInt(resultBuilder.toString());
+            if (dividerLength == getAllDigits(data.getDividend()).size()) {
+                data.setResult(variable / data.getDivider());
+                subtraction = data.getResult() * data.getDivider();
+                variable -= subtraction;
+                resultBuilder.append(data.getResult());
+                data.setResult(Integer.parseInt(resultBuilder.toString()));
 
                 filterData(buildList, zero, variable, subtraction);
             }
-            return convertToView(buildList, Math.abs(dividend), Math.abs(divider), result);
+            return convertToView(buildList, Math.abs(dividend), Math.abs(divider), data.getResult());
         } else {
-            List<String> zeroList = new ArrayList<>();
-            StringBuilder str = new StringBuilder();
-            collectData(zeroList, str, 0, 0);
-            return convertToView(zeroList, Math.abs(dividend), Math.abs(divider), result);
+            collectData(buildList, zero, 0, 0);
+            return convertToView(buildList, Math.abs(dividend), Math.abs(divider), data.getResult());
         }
     }
 
@@ -177,7 +177,7 @@ public class Division {
         if (i % 2 == 0) {
             stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft, " "))
                     + String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-")) + "\n");
-           
+
             if (countZero > 0) {
                 spaceLeft += countZero;
             }
