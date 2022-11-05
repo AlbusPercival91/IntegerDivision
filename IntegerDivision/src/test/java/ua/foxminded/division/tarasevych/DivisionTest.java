@@ -22,7 +22,7 @@ class DivisionTest {
                 + "   _25\n"
                 + "    24\n"
                 + "    --\n"
-                + "     1\n", Division.divisionDraw(Division.longDivision(78945, 4)));
+                + "     1\n", Division.divisionDraw(Division.divisionCalculation(78945, 4)));
     }
     
     @Test
@@ -36,7 +36,7 @@ class DivisionTest {
                 + "  _735\n"
                 + "   693\n"
                 + "   ---\n"
-                + "    42\n", Division.divisionDraw(Division.longDivision(78945, 99)));
+                + "    42\n", Division.divisionDraw(Division.divisionCalculation(78945, 99)));
     }
     
     @Test
@@ -53,7 +53,7 @@ class DivisionTest {
                 + "  _405\n"
                 + "   396\n"
                 + "   ---\n"
-                + "     9\n", Division.divisionDraw(Division.longDivision(78945, 66)));
+                + "     9\n", Division.divisionDraw(Division.divisionCalculation(78945, 66)));
     }
     
     @Test
@@ -70,7 +70,7 @@ class DivisionTest {
                 + "  _295\n"
                 + "   260\n"
                 + "   ---\n"
-                + "    35\n", Division.divisionDraw(Division.longDivision(78945, 65)));
+                + "    35\n", Division.divisionDraw(Division.divisionCalculation(78945, 65)));
     }
     
     @Test
@@ -84,7 +84,7 @@ class DivisionTest {
                 + "  _405\n"
                 + "   385\n"
                 + "   ---\n"
-                + "    20\n", Division.divisionDraw(Division.longDivision(78945, 77)));
+                + "    20\n", Division.divisionDraw(Division.divisionCalculation(78945, 77)));
     }
     
     @Test
@@ -104,7 +104,7 @@ class DivisionTest {
                 + "    _5\n"
                 + "     5\n"
                 + "     -\n"
-                + "     0\n", Division.divisionDraw(Division.longDivision(12345, 1)));
+                + "     0\n", Division.divisionDraw(Division.divisionCalculation(12345, 1)));
     }
     
     
@@ -123,7 +123,7 @@ class DivisionTest {
                 + "     _01\n"
                 + "       1\n"
                 + "      --\n"
-                + "       0\n", Division.divisionDraw(Division.longDivision(1010101, 1)));
+                + "       0\n", Division.divisionDraw(Division.divisionCalculation(1010101, 1)));
     }
     
     @Test
@@ -149,7 +149,7 @@ class DivisionTest {
                 + "        _1\n"
                 + "         1\n"
                 + "         -\n"
-                + "         0\n", Division.divisionDraw(Division.longDivision(111010111, 1)));
+                + "         0\n", Division.divisionDraw(Division.divisionCalculation(111010111, 1)));
     }
     
     @Test
@@ -163,7 +163,7 @@ class DivisionTest {
                 + "   _4\n"
                 + "    4\n"
                 + "    -\n"
-                + "    0\n", Division.divisionDraw(Division.longDivision(1004, 4)));
+                + "    0\n", Division.divisionDraw(Division.divisionCalculation(1004, 4)));
     }
     
     @Test
@@ -177,7 +177,7 @@ class DivisionTest {
                 + "   _04\n"
                 + "     4\n"
                 + "    --\n"
-                + "     0\n", Division.divisionDraw(Division.longDivision(10004, 4)));
+                + "     0\n", Division.divisionDraw(Division.divisionCalculation(10004, 4)));
     }
     
     @Test
@@ -194,7 +194,7 @@ class DivisionTest {
                 + "     _04\n"
                 + "       4\n"
                 + "      --\n"
-                + "       0\n", Division.divisionDraw(Division.longDivision(1000404, 4)));
+                + "       0\n", Division.divisionDraw(Division.divisionCalculation(1000404, 4)));
     }
     
     @Test
@@ -208,7 +208,7 @@ class DivisionTest {
                 + "     _012\n"
                 + "       12\n"
                 + "      ---\n"
-                + "        0\n", Division.divisionDraw(Division.longDivision(120120120, 12)));
+                + "        0\n", Division.divisionDraw(Division.divisionCalculation(120120120, 12)));
     }
     
     @Test
@@ -219,7 +219,7 @@ class DivisionTest {
                 + " _000001\n"
                 + "       1\n"
                 + "  ------\n"
-                + "       0\n", Division.divisionDraw(Division.longDivision(1000001, 1)));
+                + "       0\n", Division.divisionDraw(Division.divisionCalculation(1000001, 1)));
     }
     
     @Test
@@ -230,7 +230,7 @@ class DivisionTest {
                 + "  _0040\n"
                 + "     40\n"
                 + "   ----\n"
-                + "       4\n", Division.divisionDraw(Division.longDivision(1000404, 5)));
+                + "       4\n", Division.divisionDraw(Division.divisionCalculation(1000404, 5)));
     }
     
     @Test
@@ -238,7 +238,7 @@ class DivisionTest {
         assertEquals("_123|1234\n"
                 + " 0  |-\n"
                 + " -  |0\n"
-                + " 0\n", Division.divisionDraw(Division.longDivision(123, 1234)));
+                + " 0\n", Division.divisionDraw(Division.divisionCalculation(123, 1234)));
     }
     
     @Test
@@ -246,7 +246,7 @@ class DivisionTest {
         assertEquals("_0|1234\n"
                 + " 0|-\n"
                 + " -|0\n"
-                + " 0\n", Division.divisionDraw(Division.longDivision(0, 1234)));
+                + " 0\n", Division.divisionDraw(Division.divisionCalculation(0, 1234)));
     }
     
     @Test
@@ -257,7 +257,7 @@ class DivisionTest {
                 + "  _0040\n"
                 + "     40\n"
                 + "   ----\n"
-                + "       4\n", Division.divisionDraw(Division.longDivision(1000404, -5)));
+                + "       4\n", Division.divisionDraw(Division.divisionCalculation(1000404, -5)));
     }
     
     @Test
@@ -265,27 +265,27 @@ class DivisionTest {
         assertEquals("_78|910\n"
                 + " 0 |-\n"
                 + " - |0\n"
-                + " 0\n", Division.divisionDraw(Division.longDivision(-78, 910)));
+                + " 0\n", Division.divisionDraw(Division.divisionCalculation(-78, 910)));
     }
     
     @Test
     void testIfDividerIsZero() {
         Exception exception = assertThrows(ArithmeticException.class, () ->
-        Division.divisionDraw(Division.longDivision(78, 0)));
+        Draw.divisionDraw(Division.divisionCalculation(78, 0)));
     assertEquals("/ by zero", exception.getMessage());
     }
     
     @Test
-    void testIfDividerAndDividendIsZero() { 
+    void testIfDividerAndDividendIsZero(){ 
         Exception exception = assertThrows(ArithmeticException.class, () ->
-        Division.divisionDraw(Division.longDivision(0, 0)));
+        Draw.divisionDraw(Division.divisionCalculation(0, 0)));
     assertEquals("/ by zero", exception.getMessage());
     }
     
     @Test
     void testIfNegativeDividendAndDividerIsZero() {
         Exception exception = assertThrows(ArithmeticException.class, () ->
-        Division.divisionDraw(Division.longDivision(-12345, 0)));
+        Draw.divisionDraw(Division.divisionCalculation(-12345, 0)));
     assertEquals("/ by zero", exception.getMessage());
     }
    

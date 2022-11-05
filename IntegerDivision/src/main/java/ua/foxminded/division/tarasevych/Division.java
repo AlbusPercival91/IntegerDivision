@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Division {
+public class Division extends Draw {
 
     private Division() {
 
@@ -21,7 +21,7 @@ public class Division {
         return digitArray;
     }
 
-    private static int concatDigits(int dividend, int conditionBreak) {
+    static int concatDigits(int dividend, int conditionBreak) {
         int result = 0;
 
         for (Integer i : getAllDigits(dividend)) {
@@ -34,7 +34,7 @@ public class Division {
         return result;
     }
 
-    public static IntegerData longDivision(int dividend, int divider) {
+    public static IntegerData divisionCalculation(int dividend, int divider) {
         IntegerData data = new IntegerData();
         data.setDividend(Math.abs(dividend));
         data.setDivider(Math.abs(divider));
@@ -42,13 +42,14 @@ public class Division {
         StringBuilder zero = new StringBuilder();
         int dividerLength = String.valueOf(data.getDivider()).length();
         int subtraction = 0;
+        int variable = 0;
 
         if (data.getDivider() == 0) {
             throw new ArithmeticException("/ by zero");
         }
 
         if (data.getDividend() >= data.getDivider()) {
-            int variable = Integer.parseInt(getAllDigits(data.getDividend()).subList(0, dividerLength).toString()
+            variable = Integer.parseInt(getAllDigits(data.getDividend()).subList(0, dividerLength).toString()
                     .replace("[", "").replace("]", "").replace(", ", ""));
 
             while (dividerLength != getAllDigits(data.getDividend()).size()) {
@@ -67,15 +68,7 @@ public class Division {
                             .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
                     resultBuilder.append(0);
                 }
-
-                if (subtraction > 0) {
-                    if (!zero.isEmpty()) {
-                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + variable);
-                        zero.delete(0, zero.length());
-                    } else {
-                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + variable);
-                    }
-                }
+                filterCollectedData(data, zero, subtraction, variable);
             }
 
             if (dividerLength == getAllDigits(data.getDividend()).size()) {
@@ -85,110 +78,27 @@ public class Division {
                 resultBuilder.append(data.getResult());
                 data.setResult(Integer.parseInt(resultBuilder.toString()));
 
-                if (subtraction > 0) {
-                    if (!zero.isEmpty()) {
-                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + variable);
-                        zero.delete(0, zero.length());
-                    } else {
-                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + variable);
-                    }
-                }
+                filterCollectedData(data, zero, subtraction, variable);
             }
             return data;
         } else {
-            if (!zero.isEmpty()) {
-                Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + 0);
-                zero.delete(0, zero.length());
-            } else {
-                Collections.addAll(data.getBuildList(), " " + subtraction, "_" + 0);
-            }
+            collectData(data, zero, subtraction, variable);
             return data;
         }
     }
 
-    public static String divisionDraw(IntegerData data) {
-        List<Integer> involvedList = new ArrayList<>();
-        List<Integer> subtractList = new ArrayList<>();
-        List<Integer> leftSpaceList = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder("_" + data.getDividend() + "|" + data.getDivider() + "\n");
-        int resultLength = String.valueOf(data.getResult()).length();
-        involvedList.add(concatDigits(data.getDividend(), Integer.parseInt(data.getBuildList().get(0).trim())));
-        subtractList.add(concatDigits(data.getDividend(), Integer.parseInt(data.getBuildList().get(0).trim())));
-        int spaceLeft = 0;
-
-        for (int i = 0; i < data.getBuildList().size(); i++) {
-
-            if (i % 2 == 0) {
-                Collections.addAll(involvedList, Integer.parseInt(data.getBuildList().get(i).replace("_", "").trim()),
-                        Integer.parseInt(data.getBuildList().get(i + 1).replace("_", "").trim()));
-                Collections.addAll(subtractList, involvedList.get(i + 1),
-                        involvedList.get(i) - involvedList.get(i + 1));
-            }
-            leftSpaceList.add(
-                    String.valueOf(involvedList.get(i)).length() - String.valueOf(subtractList.get(i + 1)).length());
-            spaceLeft += leftSpaceList.get(i);
-
-            if (i < 1) {
-                int spaceMiddle = String.valueOf(data.getDividend()).length()
-                        - String.valueOf(data.getBuildList().get(i)).length();
-
-                if (leftSpaceList.get(i) > 0) {
-                    spaceMiddle = String.valueOf(data.getDividend()).length()
-                            - String.valueOf(data.getBuildList().get(i)).length() - 1;
-                }
-                int underLines = String.valueOf(data.getBuildList().get(i)).length() - 1;
-                int spaceLeftCorr = String.valueOf(involvedList.get(i)).length()
-                        - String.valueOf(involvedList.get(i + 1)).length();
-
-                if (String.valueOf(involvedList.get(i)).length() > String.valueOf(involvedList.get(i + 1)).length()) {
-                    underLines = String.valueOf(data.getBuildList().get(i)).length();
-                }
-
-                stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + data.getBuildList().get(i)
-                        + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|"
-                        + String.join("", Collections.nCopies(resultLength, "-")) + "\n");
-
-                stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft - spaceLeftCorr, " "))
-                        + String.join("", Collections.nCopies(underLines, "-"))
-                        + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|" + data.getResult() + "\n");
-            }
-
-            if (i >= 1) {
-                int countZero = 0;
-
-                if (data.getBuildList().get(i).startsWith(" ") && data.getBuildList().get(i - 1).startsWith("_0")) {
-                    String[] zeroArray = data.getBuildList().get(i - 1).replace("_", "").split("");
-
-                    for (String s : zeroArray) {
-                        if (s.equals("0")) {
-                            countZero++;
-                        } else if (!s.equals("0")) {
-                            break;
-                        }
-                    }
-                }
-                String value = String.join("", Collections.nCopies(countZero, " ")) + data.getBuildList().get(i);
-
-                if (value.contains("_") && i == data.getBuildList().size() - 1) {
-                    value = data.getBuildList().get(data.getBuildList().size() - 1).replace("_", " ");
-                }
-                stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + value + "\n");
-
-                if (i % 2 == 0) {
-                    stringBuilder.append(" " + String.join("", Collections.nCopies(spaceLeft, " "))
-                            + String.join("", Collections.nCopies(String.valueOf(value).length() - 1, "-")) + "\n");
-
-                    if (countZero > 0) {
-                        spaceLeft += countZero;
-                    }
-                }
-            }
-
-            if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
-                    && i % 2 == 0) {
-                spaceLeft++;
-            }
+    private static void filterCollectedData(IntegerData data, StringBuilder zero, int subtraction, int variable) {
+        if (subtraction > 0) {
+            collectData(data, zero, subtraction, variable);
         }
-        return stringBuilder.toString();
+    }
+
+    private static void collectData(IntegerData data, StringBuilder zero, int subtraction, int variable) {
+        if (!zero.isEmpty()) {
+            Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + variable);
+            zero.delete(0, zero.length());
+        } else {
+            Collections.addAll(data.getBuildList(), " " + subtraction, "_" + variable);
+        }
     }
 }
