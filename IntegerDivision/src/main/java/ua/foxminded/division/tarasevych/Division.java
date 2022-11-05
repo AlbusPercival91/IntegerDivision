@@ -38,7 +38,6 @@ public class Division {
         IntegerData data = new IntegerData();
         data.setDividend(Math.abs(dividend));
         data.setDivider(Math.abs(divider));
-        List<String> buildList = new ArrayList<>();
         StringBuilder resultBuilder = new StringBuilder();
         StringBuilder zero = new StringBuilder();
         int dividerLength = String.valueOf(data.getDivider()).length();
@@ -68,7 +67,15 @@ public class Division {
                             .get(dividerLength++).toString().replace("[", "").replace("]", "").replace(", ", "")));
                     resultBuilder.append(0);
                 }
-                filterData(buildList, zero, variable, subtraction);
+
+                if (subtraction > 0) {
+                    if (!zero.isEmpty()) {
+                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + variable);
+                        zero.delete(0, zero.length());
+                    } else {
+                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + variable);
+                    }
+                }
             }
 
             if (dividerLength == getAllDigits(data.getDividend()).size()) {
@@ -78,59 +85,57 @@ public class Division {
                 resultBuilder.append(data.getResult());
                 data.setResult(Integer.parseInt(resultBuilder.toString()));
 
-                filterData(buildList, zero, variable, subtraction);
+                if (subtraction > 0) {
+                    if (!zero.isEmpty()) {
+                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + variable);
+                        zero.delete(0, zero.length());
+                    } else {
+                        Collections.addAll(data.getBuildList(), " " + subtraction, "_" + variable);
+                    }
+                }
             }
-            return convertToView(buildList, data);
+            return convertToView(data);
         } else {
-            collectData(buildList, zero, 0, 0);
-            return convertToView(buildList, data);
+            if (!zero.isEmpty()) {
+                Collections.addAll(data.getBuildList(), " " + subtraction, "_" + zero + 0);
+                zero.delete(0, zero.length());
+            } else {
+                Collections.addAll(data.getBuildList(), " " + subtraction, "_" + 0);
+            }
+            return convertToView(data);
         }
     }
 
-    private static void collectData(List<String> dataList, StringBuilder zero, int variable, int subtraction) {
-        if (!zero.isEmpty()) {
-            Collections.addAll(dataList, " " + subtraction, "_" + zero + variable);
-            zero.delete(0, zero.length());
-        } else {
-            Collections.addAll(dataList, " " + subtraction, "_" + variable);
-        }
-    }
-
-    private static void filterData(List<String> dataList, StringBuilder zero, int variable, int subtraction) {
-        if (subtraction > 0) {
-            collectData(dataList, zero, variable, subtraction);
-        }
-    }
-
-    private static String convertToView(List<String> list, IntegerData data) {
+    private static String convertToView(IntegerData data) {
         List<Integer> involvedList = new ArrayList<>();
         List<Integer> subtractList = new ArrayList<>();
         List<Integer> leftSpaceList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder("_" + data.getDividend() + "|" + data.getDivider() + "\n");
         int resultLength = String.valueOf(data.getResult()).length();
-        involvedList.add(concatDigits(data.getDividend(), Integer.parseInt(list.get(0).trim())));
-        subtractList.add(concatDigits(data.getDividend(), Integer.parseInt(list.get(0).trim())));
+        involvedList.add(concatDigits(data.getDividend(), Integer.parseInt(data.getBuildList().get(0).trim())));
+        subtractList.add(concatDigits(data.getDividend(), Integer.parseInt(data.getBuildList().get(0).trim())));
         int spaceLeft = 0;
 
-        for (int i = 0; i < list.size(); i++) {
-            spaceLeft = makeSpaceLeft(list, involvedList, subtractList, leftSpaceList, spaceLeft, i);
+        for (int i = 0; i < data.getBuildList().size(); i++) {
+            spaceLeft = makeSpaceLeft(data.getBuildList(), involvedList, subtractList, leftSpaceList, spaceLeft, i);
 
             if (i < 1) {
-                int spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length();
+                int spaceMiddle = String.valueOf(data.getDividend()).length()
+                        - String.valueOf(data.getBuildList().get(i)).length();
 
                 if (leftSpaceList.get(i) > 0) {
-                    spaceMiddle = String.valueOf(data.getDividend()).length() - String.valueOf(list.get(i)).length()
-                            - 1;
+                    spaceMiddle = String.valueOf(data.getDividend()).length()
+                            - String.valueOf(data.getBuildList().get(i)).length() - 1;
                 }
-                int underLines = String.valueOf(list.get(i)).length() - 1;
+                int underLines = String.valueOf(data.getBuildList().get(i)).length() - 1;
                 int spaceLeftCorr = String.valueOf(involvedList.get(i)).length()
                         - String.valueOf(involvedList.get(i + 1)).length();
 
                 if (String.valueOf(involvedList.get(i)).length() > String.valueOf(involvedList.get(i + 1)).length()) {
-                    underLines = String.valueOf(list.get(i)).length();
+                    underLines = String.valueOf(data.getBuildList().get(i)).length();
                 }
 
-                stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + list.get(i)
+                stringBuilder.append(String.join("", Collections.nCopies(spaceLeft, " ")) + data.getBuildList().get(i)
                         + String.join("", Collections.nCopies(spaceMiddle + 1, " ")) + "|"
                         + String.join("", Collections.nCopies(resultLength, "-")) + "\n");
 
@@ -140,10 +145,10 @@ public class Division {
             }
 
             if (i >= 1) {
-                int countZero = zeroCounter(list, i);
-                String value = String.join("", Collections.nCopies(countZero, " ")) + list.get(i);
+                int countZero = zeroCounter(data.getBuildList(), i);
+                String value = String.join("", Collections.nCopies(countZero, " ")) + data.getBuildList().get(i);
 
-                spaceLeft = makePostHeader(list, stringBuilder, spaceLeft, i, countZero, value);
+                spaceLeft = makePostHeader(data.getBuildList(), stringBuilder, spaceLeft, i, countZero, value);
             }
 
             if (involvedList.get(i) - involvedList.get(i + 1) == 0 && involvedList.get(involvedList.size() - 1) != 0
