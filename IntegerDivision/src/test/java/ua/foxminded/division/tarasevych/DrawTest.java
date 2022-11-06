@@ -15,23 +15,23 @@ class DrawTest {
 
     @Test
     void testIfDividerIsZero() {
-        Exception exception = assertThrows(ArithmeticException.class,
+        Exception arithmeticException = assertThrows(Exception.class,
                 () -> Draw.divisionDraw(Division.divisionCalculation(78, 0)));
-        assertEquals("/ by zero", exception.getMessage());
+        assertEquals("/ by zero", arithmeticException.getMessage());
     }
 
     @Test
     void testIfDividerAndDividendIsZero() {
-        Exception exception = assertThrows(ArithmeticException.class,
+        Exception arithmeticException = assertThrows(Exception.class,
                 () -> Draw.divisionDraw(Division.divisionCalculation(0, 0)));
-        assertEquals("/ by zero", exception.getMessage());
+        assertEquals("/ by zero", arithmeticException.getMessage());
     }
 
     @Test
     void testIfNegativeDividendAndDividerIsZero() {
-        Exception exception = assertThrows(ArithmeticException.class,
+        Exception arithmeticException = assertThrows(Exception.class,
                 () -> Draw.divisionDraw(Division.divisionCalculation(-12345, 0)));
-        assertEquals("/ by zero", exception.getMessage());
+        assertEquals("/ by zero", arithmeticException.getMessage());
     }
 
 }
