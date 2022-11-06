@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class DrawTest {
 
     @ParameterizedTest
-    @MethodSource("ua.foxminded.division.tarasevych.Values#expectedAndActualStringProvider")
+    @MethodSource("ua.foxminded.division.tarasevych.ArgumentValues#expectedAndActualStringProvider")
     void testWithMultiArgMethodSource(String expected, String actual) {
         assertEquals(expected, actual);
     }

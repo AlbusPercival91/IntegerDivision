@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.stream.Stream;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class Values {
+public class ArgumentValues {
 
     static String testIfDividerHasOneDigitLessThanFirstVariable = "_78945|4\n" + " 4    |-----\n" + " -    |19736\n"
             + "_38\n" + " 36\n" + " --\n" + " _29\n" + "  28\n" + "  --\n" + "  _14\n" + "   12\n" + "   --\n"
