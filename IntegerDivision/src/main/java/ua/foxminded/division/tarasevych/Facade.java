@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Facade {
 
-    protected Facade() {
+    private Facade() {
 
     }
 
