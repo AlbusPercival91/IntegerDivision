@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Division extends Facade {
+public class Division {
 
     private Division() {
 
