@@ -20,7 +20,7 @@ public class LongDivision {
                 while (scan.hasNext()) {
                     int dividend = scan.nextInt();
                     int divider = scan.nextInt();
-                    logger.info(Draw.divisionDraw(Division.divisionCalculation(dividend, divider)));
+                    logger.info(Facade.divisionDraw(Division.divisionCalculation(dividend, divider)));
                 }
             } catch (InputMismatchException e) {
                 if (scan.next().equalsIgnoreCase("q")) {
