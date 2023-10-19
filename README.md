@@ -8,7 +8,7 @@ Application that divides numbers and prints results into the console
 
 
 ## Usage
-Just input two numbers and get the console output:
+Just input two numbers and get the console output as shown in example:
 ```bash
 123456
 6543
