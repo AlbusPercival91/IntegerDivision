@@ -64,7 +64,7 @@ jobs:
           fi
 
       - name: Label or Unlabeled Issue as Blocked
-        if: ${{ env.blocked == 'true' }}
+        if: ${{ env.blocked == 'true' && github.event_name != 'closed' }}
         run: |
           echo "Labeling issue as blocked..."
           echo "GitHub Repository: ${{ github.repository }}"
@@ -83,7 +83,7 @@ jobs:
           fi
 
       - name: Unlabeled Issue if No Blocked Dependencies
-        if: ${{ env.blocked == 'false' }}
+        if: ${{ env.blocked == 'false' && github.event_name != 'closed' }}
         run: |
           echo "Removing 'blocked' label from the issue..."
           echo "GitHub Repository: ${{ github.repository }}"
