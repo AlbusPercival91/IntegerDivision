@@ -87,7 +87,7 @@ jobs:
         run: |
           echo "Removing 'blocked' label from dependent issues..."
           echo "GitHub Repository: ${{ github.repository }}"
-          dependencies=$(... # Get dependencies using your logic)
+          dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
           for issue in $dependencies; do
             # Remove the 'blocked' label from each dependent issue
             response=$(curl -s -w "%{http_code}" -X DELETE \
