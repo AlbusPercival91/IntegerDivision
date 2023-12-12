@@ -34,9 +34,9 @@ jobs:
 
           for issue in $dependencies; do
             status=$(curl -s -w "%{http_code}" -X GET \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/$issue")
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$issue")
             http_status=$(tail -n1 <<< "$status")
             body=$(head -n-1 <<< "$status")
 
@@ -54,11 +54,17 @@ jobs:
 
               # Label the dependent issue as blocked
               echo "Labeling dependent issue #$issue as blocked..."
-              curl -s -w "%{http_code}" -X POST \
+              response=$(curl -s -w "%{http_code}" -X POST \
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                 -d '{"labels": ["blocked"]}' \
-                "https://api.github.com/repos/${{ github.repository }}/issues/$issue/labels"
+                "https://api.github.com/repos/${{ github.repository }}/issues/$issue/labels")
+              http_status=$(tail -n1 <<< "$response")
+
+              if ! [[ "$http_status" =~ ^2 ]]; then
+                echo "Failed to add 'blocked' label to dependent issue #$issue: HTTP $http_status"
+                exit 1
+              fi
             fi
           done
 
