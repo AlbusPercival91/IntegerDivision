@@ -1,7 +1,5 @@
 name: Label Blocked Issues
 
-permissions: write-all
-
 on:
   issues:
     types: [ opened, edited, reopened, closed ]
@@ -83,6 +81,10 @@ jobs:
             echo "Failed to add 'blocked' label: HTTP $http_status"
             exit 1
           fi
+
+      - name: Delay Before Unlabeling
+        if: ${{ env.blocked == 'false' }}
+        run: sleep 10
 
       - name: Unlabeled Issue if No Blocked Dependencies
         if: ${{ env.blocked == 'false' }}
