@@ -1,7 +1,5 @@
 name: Label Blocked Issues
 
-permissions: write-all
-
 on:
   issues:
     types: [ opened, edited, reopened, closed ]
@@ -67,7 +65,6 @@ jobs:
 
       - name: Label or Unlabeled Issue as Blocked
         if: ${{ env.blocked == 'true' }}
-        id: label-issue
         run: |
           echo "Labeling issue as blocked..."
           echo "GitHub Repository: ${{ github.repository }}"
@@ -84,10 +81,6 @@ jobs:
             echo "Failed to add 'blocked' label: HTTP $http_status"
             exit 1
           fi
-
-      - name: Wait for Labeling to Complete
-        if: steps.label-issue.outputs.status == 'completed'
-        run: sleep 5
 
       - name: Unlabeled Issue if No Blocked Dependencies
         if: ${{ env.blocked == 'false' }}
