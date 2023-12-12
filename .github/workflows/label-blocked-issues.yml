@@ -82,21 +82,63 @@ jobs:
             exit 1
           fi
 
+      - name: Find Issues That Must Be Unblocked
+        id: find-unblocked-issues
+        run: |
+          issue_body=$(jq -r .issue.body $GITHUB_EVENT_PATH)
+          dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
+          found_unblocked=false
+          errors=()
+
+          for issue in $dependencies; do
+            status=$(curl -s -w "%{http_code}" -X GET \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$issue/labels")
+            http_status=$(tail -n1 <<< "$status")
+            body=$(head -n-1 <<< "$status")
+
+            if [[ "$http_status" != "200" ]]; then
+              echo "HTTP Status: $http_status, Error fetching labels for issue #$issue"
+              errors+=("Error fetching labels for issue #$issue")
+              continue
+            fi
+
+            # Check if the 'blocked' label is present
+            label_present=$(echo "$body" | jq -r 'map(.name) | contains(["blocked"])')
+
+            if [ "$label_present" == "false" ]; then
+              echo "Issue #$issue is not blocked"
+              found_unblocked=true
+            fi
+          done
+
+          if [ ${#errors[@]} -ne 0 ]; then
+            printf '%s\n' "${errors[@]}"
+            exit 1
+          fi
+
+          if [[ "$found_unblocked" == true ]]; then
+            echo "The script has determined that the issue must be unblocked."
+            echo "unblocked=true" >> $GITHUB_ENV
+          else
+            echo "No dependencies are labeled as 'blocked.' No 'unblocked' action needed."
+            echo "unblocked=false" >> $GITHUB_ENV
+          fi
+
       - name: Unlabel Dependent Issues
-        if: ${{ env.blocked == 'false' }}
+        if: ${{ env.unblocked == 'true' }}
         run: |
           echo "Removing 'blocked' label from dependent issues..."
           echo "GitHub Repository: ${{ github.repository }}"
           dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
           for issue in $dependencies; do
             # Remove the 'blocked' label from each dependent issue
-            response=$(curl -s -w "\nHTTP %{http_code}\n" -X DELETE \
+            response=$(curl -s -w "%{http_code}" -X DELETE \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/$issue/labels/blocked")
-            echo "Curl Response: $response"
             http_status=$(tail -n1 <<< "$response")
-            echo "HTTP Status Code: $http_status"
             if [[ "$http_status" == "404" ]]; then
               echo "'Blocked' label was not present on the dependent issue #$issue."
             elif ! [[ "$http_status" =~ ^2 ]]; then
