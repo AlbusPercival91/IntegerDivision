@@ -94,7 +94,7 @@ jobs:
           echo "Issue Number: ${{ github.event.issue.number }}"
 
           # Extract dependent issue numbers from the issue body
-          dependent_issues=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
+          dependent_issues=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
 
           for dependent_issue in $dependent_issues; do
             # Remove 'blocked' label from dependent issue
@@ -112,4 +112,5 @@ jobs:
               exit 1
             fi
           done
+      
       
