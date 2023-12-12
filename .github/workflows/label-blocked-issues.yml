@@ -1,9 +1,5 @@
 name: Label Blocked Issues
 
-permissions:
-  contents: read
-  issues: write
-
 on:
   issues:
     types: [ opened, edited, reopened, closed ]
