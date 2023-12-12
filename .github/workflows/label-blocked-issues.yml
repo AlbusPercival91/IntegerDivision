@@ -23,7 +23,7 @@ jobs:
           echo "remaining=$remaining" >> $GITHUB_ENV
           echo "reset=$reset" >> $GITHUB_ENV
 
-      - name: Find and Label Blocked Issues
+      - name: Find Issues That Must Be Blocked
         if: ${{ env.remaining }} > 10
         id: find-blocked-issues
         run: |
@@ -60,7 +60,7 @@ jobs:
           fi
 
           if [[ "$found_blocked" == true ]]; then
-            echo "The script has determined that the issue is blocked."
+            echo "The script has determined that the issue must be blocked."
             echo "blocked=true" >> $GITHUB_ENV
           else
             echo "All dependencies are closed. No 'blocked' label needed."
@@ -89,29 +89,17 @@ jobs:
       - name: Unlabeled Issue if No Blocked Dependencies
         if: ${{ env.blocked == 'false' }}
         run: |
-          echo "Removing 'blocked' label from dependent issues..."
+          echo "Removing 'blocked' label from the issue..."
           echo "GitHub Repository: ${{ github.repository }}"
           echo "Issue Number: ${{ github.event.issue.number }}"
-
-          # Get the list of dependent issues from comments
-          dependent_issues=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments" | jq -r '.[] | select(.body | test("#[0-9]+")) | .body | match("#[0-9]+") | .string')
-
-          for dependent_issue in $dependent_issues; do
-            dependent_issue_number=$(echo "$dependent_issue" | sed 's/#//g')
-
-            # Remove 'blocked' label from dependent issue
-            echo "Removing 'blocked' label from dependent issue #$dependent_issue_number..."
-            response=$(curl -s -w "%{http_code}" -X DELETE \
-              -H "Accept: application/vnd.github.v3+json" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue_number/labels/blocked")
-            http_status=$(tail -n1 <<< "$response")
-
-            if [[ "$http_status" == "404" ]]; then
-              echo "'Blocked' label was not present on dependent issue #$dependent_issue_number."
-            elif ! [[ "$http_status" =~ ^2 ]]; then
-              echo "Failed to remove 'blocked' label from dependent issue #$dependent_issue_number: HTTP $http_status"
-              exit 1
-            fi
-          done
+          response=$(curl -s -w "%{http_code}" -X DELETE \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels/blocked")
+          http_status=$(tail -n1 <<< "$response")
+          if [[ "$http_status" == "404" ]]; then
+            echo "'Blocked' label was not present on the issue."
+          elif ! [[ "$http_status" =~ ^2 ]]; then
+            echo "Failed to remove 'blocked' label: HTTP $http_status"
+            exit 1
+          fi
