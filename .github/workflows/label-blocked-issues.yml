@@ -94,21 +94,20 @@ jobs:
             status=$(curl -s -w "%{http_code}" -X GET \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/issues/$issue/labels")
+              "https://api.github.com/repos/${{ github.repository }}/issues/$issue")
             http_status=$(tail -n1 <<< "$status")
             body=$(head -n-1 <<< "$status")
 
             if [[ "$http_status" != "200" ]]; then
-              echo "HTTP Status: $http_status, Error fetching labels for issue #$issue"
-              errors+=("Error fetching labels for issue #$issue")
+              echo "HTTP Status: $http_status, Error fetching status for issue #$issue"
+              errors+=("Error fetching status for issue #$issue")
               continue
             fi
 
-            # Check if the 'blocked' label is present
-            label_present=$(echo "$body" | jq -r 'map(.name) | contains(["blocked"])')
+            status=$(echo "$body" | jq -r .state)
 
-            if [ "$label_present" == "false" ]; then
-              echo "Issue #$issue is not blocked"
+            if [ "$status" != "closed" ]; then
+              echo "Issue #$issue is still open. This may cause unblocking."
               found_unblocked=true
             fi
           done
@@ -122,7 +121,7 @@ jobs:
             echo "The script has determined that the issue must be unblocked."
             echo "unblocked=true" >> $GITHUB_ENV
           else
-            echo "No dependencies are labeled as 'blocked.' No 'unblocked' action needed."
+            echo "No dependencies are open. No 'unblocked' action needed."
             echo "unblocked=false" >> $GITHUB_ENV
           fi
 
