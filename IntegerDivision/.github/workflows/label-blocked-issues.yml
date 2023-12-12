@@ -1,0 +1,105 @@
+name: Label Blocked Issues
+
+permissions:
+  contents: read
+  issues: write
+
+on:
+  issues:
+    types: [ opened, edited, reopened, closed ]
+
+jobs:
+  label-blocked-issues:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Check Rate Limit
+        id: rate_limit
+        run: |
+          response=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/rate_limit")
+          remaining=$(echo "$response" | jq .rate.remaining)
+          reset=$(echo "$response" | jq .rate.reset)
+          echo "remaining=$remaining" >> $GITHUB_ENV
+          echo "reset=$reset" >> $GITHUB_ENV
+
+      - name: Find and Label Blocked Issues
+        if: ${{ env.remaining }} > 10
+        id: find-blocked-issues
+        run: |
+          issue_body=$(jq -r .issue.body $GITHUB_EVENT_PATH)
+          dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
+          found_blocked=false
+          errors=()
+
+          for issue in $dependencies; do
+            status=$(curl -s -w "%{http_code}" -X GET \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$issue")
+            http_status=$(tail -n1 <<< "$status")
+            body=$(head -n-1 <<< "$status")
+
+            if [[ "$http_status" != "200" ]]; then
+              echo "HTTP Status: $http_status, Error fetching status for issue #$issue"
+              errors+=("Error fetching status for issue #$issue")
+              continue
+            fi
+
+            status=$(echo "$body" | jq -r .state)
+
+            if [ "$status" != "closed" ]; then
+              echo "Issue #$issue is still open"
+              found_blocked=true
+            fi
+          done
+
+          if [ ${#errors[@]} -ne 0 ]; then
+            printf '%s\n' "${errors[@]}"
+            exit 1
+          fi
+
+          if [[ "$found_blocked" == true ]]; then
+            echo "The script has determined that the issue is blocked."
+            echo "blocked=true" >> $GITHUB_ENV
+          else
+            echo "All dependencies are closed. No 'blocked' label needed."
+            echo "blocked=false" >> $GITHUB_ENV
+          fi
+
+      - name: Label or Unlabeled Issue as Blocked
+        if: ${{ env.blocked == 'true' }}
+        run: |
+          echo "Labeling issue as blocked..."
+          echo "GitHub Repository: ${{ github.repository }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+
+          response=$(curl -s -w "%{http_code}" -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -d '{"labels": ["blocked"]}' \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels")
+          http_status=$(tail -n1 <<< "$response")
+
+          if ! [[ "$http_status" =~ ^2 ]]; then
+            echo "Failed to add 'blocked' label: HTTP $http_status"
+            exit 1
+          fi
+
+      - name: Unlabeled Issue if No Blocked Dependencies
+        if: ${{ env.blocked == 'false' }}
+        run: |
+          echo "Removing 'blocked' label from the issue..."
+          echo "GitHub Repository: ${{ github.repository }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+          response=$(curl -s -w "%{http_code}" -X DELETE \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels/blocked")
+          http_status=$(tail -n1 <<< "$response")
+          if [[ "$http_status" == "404" ]]; then
+            echo "'Blocked' label was not present on the issue."
+          elif ! [[ "$http_status" =~ ^2 ]]; then
+            echo "Failed to remove 'blocked' label: HTTP $http_status"
+            exit 1
+          fi
