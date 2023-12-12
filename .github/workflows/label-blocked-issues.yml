@@ -90,11 +90,13 @@ jobs:
           dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
           for issue in $dependencies; do
             # Remove the 'blocked' label from each dependent issue
-            response=$(curl -s -w "%{http_code}" -X DELETE \
+            response=$(curl -s -w "\nHTTP %{http_code}\n" -X DELETE \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/$issue/labels/blocked")
+            echo "Curl Response: $response"
             http_status=$(tail -n1 <<< "$response")
+            echo "HTTP Status Code: $http_status"
             if [[ "$http_status" == "404" ]]; then
               echo "'Blocked' label was not present on the dependent issue #$issue."
             elif ! [[ "$http_status" =~ ^2 ]]; then
