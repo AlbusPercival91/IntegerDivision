@@ -1,5 +1,7 @@
 name: Label Blocked Issues
 
+permissions: write-all
+
 on:
   issues:
     types: [ opened, edited, reopened, closed ]
