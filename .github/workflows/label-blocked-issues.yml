@@ -106,7 +106,7 @@ jobs:
             if [ "$other_open_dependencies" -eq 0 ]; then
               # No other open dependencies, remove the 'blocked' label
               echo "Removing 'blocked' label from dependent issue #$dependent_issue_number..."
-              response=$(curl -s -w "\n%{http_code}" -X DELETE \
+              response=$(curl -s -w "%{http_code}" -X DELETE \
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                 "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue_number/labels/blocked")
