@@ -87,20 +87,15 @@ jobs:
         run: |
           closed_issue_number=${{ github.event.issue.number }}
           echo "Closed issue number: $closed_issue_number"
-          
-          # Find issues that depend on the closed issue
-          dependent_issues=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues?state=all" | \
-            jq --arg closed_issue_number "$closed_issue_number" \
-            '.[] | select(.body | test("#" + $closed_issue_number + "(?![0-9])")) | .number')
-          
-          for dependent_issue in $dependent_issues; do
+
+          # Iterate through the dependencies and remove the 'blocked' label
+          for dependent_issue in $dependencies; do
             echo "Removing 'blocked' label from dependent issue #$dependent_issue..."
             response=$(curl -s -w "%{http_code}" -X DELETE \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue/labels/blocked")
-          
+
             http_status=$(tail -n1 <<< "$response")
             if [[ "$http_status" == "404" ]]; then
               echo "'Blocked' label was not present on dependent issue #$dependent_issue."
