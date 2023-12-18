@@ -35,6 +35,8 @@ jobs:
               "https://api.github.com/repos/${{ github.repository }}/issues/$issue")
             http_status=$(tail -n1 <<< "$status")
             body=$(head -n-1 <<< "$status")
+          
+          echo "Debug: Issue #$issue - HTTP Status: $http_status"
 
             if [[ "$http_status" != "200" ]]; then
               echo "HTTP Status: $http_status, Error fetching status for issue #$issue"
