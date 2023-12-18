@@ -91,7 +91,7 @@ jobs:
           # Find issues that depend on the closed issue
           dependent_issues=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/issues?state=all" | jq -r --arg closed_issue_number "$closed_issue_number" \
-            '.[] | select(.body | test("#\($closed_issue_number)(?![0-9])")) | .number')
+            '.[] | select(. | .body | test("#\($closed_issue_number)(?![0-9])")) | .number')
 
           # Iterate over each dependent issue
           for dependent_issue_number in $dependent_issues; do
