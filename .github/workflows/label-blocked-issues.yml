@@ -23,20 +23,24 @@ jobs:
         if: ${{ env.remaining }} > 10
         id: find-blocked-issues
         run: |
+          echo "Debug: Dependencies - $dependencies"
           issue_body=$(jq -r .issue.body $GITHUB_EVENT_PATH)
           dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
           found_blocked=false
           errors=()
 
+          echo "Debug: Processing dependencies - $dependencies"
+
           for issue in $dependencies; do
+            echo "Debug: Processing dependency - $issue"
             status=$(curl -s -w "%{http_code}" -X GET \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/$issue")
             http_status=$(tail -n1 <<< "$status")
             body=$(head -n-1 <<< "$status")
-          
-          echo "Debug: Issue #$issue - HTTP Status: $http_status"
+
+            echo "Debug: Issue #$issue - HTTP Status: $http_status"
 
             if [[ "$http_status" != "200" ]]; then
               echo "HTTP Status: $http_status, Error fetching status for issue #$issue"
@@ -47,13 +51,13 @@ jobs:
             status=$(echo "$body" | jq -r .state)
 
             if [ "$status" != "closed" ]; then
-              echo "Issue #$issue is still open"
+              echo "Debug: Issue #$issue is still open"
               found_blocked=true
             fi
           done
 
           if [ ${#errors[@]} -ne 0 ]; then
-            printf '%s\n' "${errors[@]}"
+            printf 'Debug: %s\n' "${errors[@]}"
             exit 1
           fi
 
@@ -61,7 +65,7 @@ jobs:
             echo "The script has determined that the issue must be blocked."
             echo "blocked=true" >> $GITHUB_ENV
           else
-            echo "All dependencies are closed. No 'blocked' label needed."
+            echo "Debug: All dependencies are closed. No 'blocked' label needed."
             echo "blocked=false" >> $GITHUB_ENV
           fi
 
