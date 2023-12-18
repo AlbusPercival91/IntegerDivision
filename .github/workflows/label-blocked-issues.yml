@@ -23,11 +23,7 @@ jobs:
         if: ${{ env.remaining }} > 10
         id: find-blocked-issues
         run: |
-          issue_number=${{ github.event.issue.number }}
-          
-          # Fetch the latest information about the issue from GitHub API
-          issue_body=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/issues/$issue_number" | jq -r .body)
+          issue_body=$(jq -r .issue.body $GITHUB_EVENT_PATH)
           dependencies=$(echo "$issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' || true)
           found_blocked=false
           errors=()
