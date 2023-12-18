@@ -95,6 +95,7 @@ jobs:
 
           # Iterate over each dependent issue
           for dependent_issue_number in $dependent_issues; do
+            echo "Checking dependent issue #$dependent_issue_number..."
             # Check if the dependent issue has other open dependencies
             other_open_dependencies=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue_number" | jq -r '.body' \
