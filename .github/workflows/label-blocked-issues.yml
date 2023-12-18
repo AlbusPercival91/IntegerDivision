@@ -94,7 +94,8 @@ jobs:
             jq --arg closed_issue_number "$closed_issue_number" \
             '.[] | select(.body | test("#" + $closed_issue_number + "(?![0-9])")) | {number: .number, body: .body}')
 
-          for dependent_issue in $dependent_issues; do
+          # Process each dependent issue individually
+          echo "$dependent_issues" | while IFS= read -r dependent_issue; do
             # Extract issue number and body from the JSON object
             dependent_issue_number=$(echo "$dependent_issue" | jq -r '.number')
             dependent_issue_body=$(echo "$dependent_issue" | jq -r '.body')
