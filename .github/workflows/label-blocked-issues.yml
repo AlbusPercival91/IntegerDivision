@@ -135,3 +135,4 @@ jobs:
               echo "Not removing 'blocked' label from dependent issue #$dependent_issue. Some dependencies are still open."
             fi
           done
+      
