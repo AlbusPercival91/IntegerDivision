@@ -90,18 +90,15 @@ jobs:
 
           # Find issues that depend on the closed issue
           dependent_issues=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues?state=all" | \
-            jq --arg closed_issue_number "$closed_issue_number" \
-            '.[] | select(.body | test("#" + $closed_issue_number + "(?![0-9])")) | {number: .number, body: .body}')
+            "https://api.github.com/repos/${{ github.repository }}/issues?state=all" | jq -r --arg closed_issue_number "$closed_issue_number" \
+            '.[] | select(.body | test("#\($closed_issue_number)(?![0-9])")) | .number')
 
           # Iterate over each dependent issue
-          echo "$dependent_issues" | while IFS= read -r dependent_issue; do
-            # Extract issue number and body from the JSON object
-            dependent_issue_number=$(echo "$dependent_issue" | jq -r '.number')
-            dependent_issue_body=$(echo "$dependent_issue" | jq -r '.body')
-
+          for dependent_issue_number in $dependent_issues; do
             # Check if the dependent issue has other open dependencies
-            other_open_dependencies=$(echo "$dependent_issue_body" | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' | \
+            other_open_dependencies=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue_number" | jq -r '.body' \
+              | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g' | \
               xargs -I {} curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/{}" | jq -r '.state' | grep -c 'open')
 
