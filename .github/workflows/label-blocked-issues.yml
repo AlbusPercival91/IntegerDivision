@@ -150,13 +150,13 @@ jobs:
           for dependent_issue in $dependencies; do
             echo "Checking status for dependent issue #$dependent_issue..."
 
-            # Check if the dependent issue has dependencies
-            dependent_dependencies=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            # Check if the dependent issue has the reopened issue as a dependency
+            has_reopened_dependency=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue" | \
-              jq -r '.body' | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g')
+              jq -r --arg reopened_issue_number "$reopened_issue_number" \
+              '.body | test("#" + $reopened_issue_number + "(?![0-9])")')
 
-            # Check if the reopened issue is in the list of dependent dependencies
-            if echo "$dependent_dependencies" | grep -q "$reopened_issue_number"; then
+            if [[ "$has_reopened_dependency" == "true" ]]; then
               echo "Reopened issue #${reopened_issue_number} is a dependency of dependent issue #$dependent_issue."
               echo "Labeling dependent issue #$dependent_issue as blocked..."
 
@@ -177,5 +177,4 @@ jobs:
               echo "No 'blocked' label needed for dependent issue #$dependent_issue."
             fi
           done
-      
       
