@@ -20,7 +20,7 @@ jobs:
           echo "reset=$reset" >> $GITHUB_ENV
 
       - name: Find Issues That Must Be Blocked
-        if: ${{ env.remaining }} > 10 || github.event_name == 'issues' && (github.event.action == 'reopened' || github.event.action == 'edited')
+        if: ${{ env.remaining }} > 10
         id: find-blocked-issues
         run: |
           issue_body=$(jq -r .issue.body $GITHUB_EVENT_PATH)
@@ -44,9 +44,9 @@ jobs:
 
             status=$(echo "$body" | jq -r .state)
 
-            if [ "$status" != "closed" ]; then
-              echo "Issue #$issue is still open"
-              found_blocked=true
+            if [ "$status" != "closed" ] || [ "$status" != "reopen" ]; then
+             echo "Issue #$issue is still open"
+             found_blocked=true
             fi
           done
 
