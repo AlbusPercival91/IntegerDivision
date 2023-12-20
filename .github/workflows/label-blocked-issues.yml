@@ -144,34 +144,38 @@ jobs:
 
           # Find dependencies of the reopened issue
           dependencies=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/issues/$reopened_issue_number" | \
-          jq -r '.body' | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g')
+            "https://api.github.com/repos/${{ github.repository }}/issues/$reopened_issue_number" | \
+            jq -r '.body' | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g')
 
           for dependent_issue in $dependencies; do
-          echo "Checking status for dependent issue #$dependent_issue..."
+            echo "Checking status for dependent issue #$dependent_issue..."
 
-          # Check the state of each dependent issue
-          state=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue" | \
-          jq -r '.state')
+            # Check if the dependent issue has dependencies
+            dependent_dependencies=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue" | \
+              jq -r '.body' | grep -oP "(?<=^|\s)#\d+(?=\s|$)" | sed 's/#//g')
 
-          if [ "$state" == "open" ]; then
-          echo "Labeling dependent issue #$dependent_issue as blocked..."
-          response=$(curl -s -w "%{http_code}" -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          -d '{"labels": ["blocked"]}' \
-          "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue/labels")
+            # Check if the reopened issue is in the list of dependent dependencies
+            if echo "$dependent_dependencies" | grep -q "$reopened_issue_number"; then
+              echo "Reopened issue #${reopened_issue_number} is a dependency of dependent issue #$dependent_issue."
+              echo "Labeling dependent issue #$dependent_issue as blocked..."
 
-          http_status=$(tail -n1 <<< "$response")
+              response=$(curl -s -w "%{http_code}" -X POST \
+                -H "Accept: application/vnd.github.v3+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                -d '{"labels": ["blocked"]}' \
+                "https://api.github.com/repos/${{ github.repository }}/issues/$dependent_issue/labels")
 
-          if ! [[ "$http_status" =~ ^2 ]]; then
-           echo "Failed to add 'blocked' label to dependent issue #$dependent_issue: HTTP $http_status"
-           exit 1
-          fi
-          else
-           echo "Dependent issue #$dependent_issue is not open. No 'blocked' label needed."
-          fi
+              http_status=$(tail -n1 <<< "$response")
+
+              if ! [[ "$http_status" =~ ^2 ]]; then
+                echo "Failed to add 'blocked' label to dependent issue #$dependent_issue: HTTP $http_status"
+                exit 1
+              fi
+            else
+              echo "Reopened issue #${reopened_issue_number} is not a dependency of dependent issue #$dependent_issue."
+              echo "No 'blocked' label needed for dependent issue #$dependent_issue."
+            fi
           done
-    
+      
       
