@@ -47,14 +47,6 @@ jobs:
             if [ "$status" != "closed" ]; then
               echo "Issue #$issue is still open"
               found_blocked=true
-            elif [ "$status" == "closed" ]; then
-              # Check if the issue was closed due to reopening
-              events=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                "https://api.github.com/repos/${{ github.repository }}/issues/$issue/events")
-              if echo "$events" | jq -r '.[-1].event' | grep -q 'reopened'; then
-                echo "Issue #$issue was reopened"
-                found_blocked=true
-              fi
             fi
           done
 
@@ -70,7 +62,6 @@ jobs:
             echo "All dependencies are closed. No 'blocked' label needed."
             echo "blocked=false" >> $GITHUB_ENV
           fi
-      
 
       - name: Label Issue as Blocked
         if: ${{ env.blocked == 'true' }}
@@ -144,4 +135,5 @@ jobs:
               echo "Not removing 'blocked' label from dependent issue #$dependent_issue. Some dependencies are still open."
             fi
           done
+
       
