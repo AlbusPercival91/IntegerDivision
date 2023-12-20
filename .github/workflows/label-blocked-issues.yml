@@ -42,10 +42,12 @@ jobs:
               continue
             fi
 
-            status=$(echo "$body" | jq -r .state)
-
-            if [ "$status" != "closed" ]; then
-              echo "Issue #$issue is still open"
+            status=$(echo "$body" | jq -r '.state')
+            created_at=$(echo "$body" | jq -r '.created_at')
+            updated_at=$(echo "$body" | jq -r '.updated_at')
+          
+            if [ "$status" != "closed" ] && [ "$updated_at" != "$created_at" ]; then
+              echo "Issue #$issue is still open or has been reopened"
               found_blocked=true
             fi
           done
