@@ -20,7 +20,7 @@ jobs:
           echo "reset=$reset" >> $GITHUB_ENV
 
       - name: Find Issues That Must Be Blocked
-        if: ${{ env.remaining > 10 }}
+        if: ${{ env.remaining }} > 10
         id: find-blocked-issues
         run: |
           issue_body=$(jq -r .issue.body $GITHUB_EVENT_PATH)
