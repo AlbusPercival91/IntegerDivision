@@ -44,7 +44,7 @@ jobs:
 
             status=$(echo "$body" | jq -r .state)
 
-            if [ "$status" != "closed" ] || [ "$status" != "reopen" ]; then
+            if [ "$status" != "closed" ] && [ "$status" != "reopen" ]; then
              echo "Issue #$issue is still open"
              found_blocked=true
             fi
